@@ -1,0 +1,28 @@
+.gridContainer {
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  column-gap: 36px;
+  row-gap: 30px;
+}
+
+.pagination-divider {
+  border-top: 1px solid #969bab;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  width: 65%;
+  height: 30px;
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 32px;
+  color: #000000;
+}

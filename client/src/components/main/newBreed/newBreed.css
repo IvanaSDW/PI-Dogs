@@ -1,0 +1,112 @@
+.new-breed-screen {
+  background-color: rgba(140, 48, 245, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10vh 10vh;
+}
+
+.form-card {
+  width: 60%;
+  height: max-content;
+  min-width: 700px;
+  background-color: #fff;
+  display: block;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 6px;
+}
+
+.card-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  padding-block: 24px;
+  background-color: #f1e4ff;
+}
+
+.card-body {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0;
+}
+
+.new-breed-image {
+  object-fit: cover;
+  width: 50%;
+  border-radius: 0 0 0 6px;
+}
+
+.breed-form {
+  margin: 0;
+  width: 50%;
+  padding: 24px 24px 24px 24px;
+}
+
+label {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
+.name-group {
+    margin-top: 0;
+}
+
+.sub-label {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 8px;
+  line-height: 18px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.form-control {
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 16px;
+}
+
+.double-input {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.sub-input {
+  width: 45%;
+}
+
+.create-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    color: #f1e4ff;
+    background: #8c30f5;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.8em;
+    font-weight: 500;
+    margin: 0 auto;
+}
+
+.footer {
+  position: relative;
+  bottom: 0;
+}

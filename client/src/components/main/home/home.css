@@ -1,0 +1,60 @@
+.mainContainer {
+  display: grid;
+  grid-template-rows: max-content max-content max-content 100px;
+  grid-template-columns: 21% 79%;
+  grid-template-areas:
+    "header header"
+    "hero hero "
+    "filter gallery"
+    "footer footer";
+  grid-auto-flow: column;
+}
+
+.header {
+  grid-area: header;
+  height: max-content;
+}
+
+.hero {
+  grid-area: hero;
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px 18%;
+  justify-content: center;
+  align-items: center;
+  line-height: 28px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.subTitle {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.filter {
+  grid-area: filter;
+  margin-left: 62px;
+  margin-right: 20px;
+  margin-bottom: 44px;
+}
+
+.gallery {
+  grid-area: gallery;
+  margin-left: 20px;
+  margin-right: 62px;
+  margin-bottom: 44px;
+}
+
+.footer {
+  grid-area: footer;
+}

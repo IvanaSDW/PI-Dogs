@@ -1,0 +1,26 @@
+.footer-container {
+  background-color: #0b0d17;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  padding-left: 11%;
+  padding-right: 11%;
+  justify-content: space-between;
+}
+
+.footer-container p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+
+  /* Text / Gray 300 */
+  color: #d9dbe1;
+}
+
+.logo-henry {
+  height: 28px;
+}
+
+.social-links {
+}
