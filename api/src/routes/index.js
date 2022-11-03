@@ -5,7 +5,10 @@ const {
   getDogsRoute,
   getBreedRoute,
   postDogRoute,
-} = require(".//dog.routes.js");
+} = require("./dog.routes.js");
+
+const postDog = require("./postDog.js");
+
 const { getTemperamentsRoute } = require("./temperament.routes.js");
 
 const router = Router();
@@ -16,9 +19,11 @@ getTemperamentsRoute(router);
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
-router.use(getDogsRoute);
-router.use(getBreedRoute);
-router.use(postDogRoute);
-router.use(getTemperamentsRoute);
+
+// router.use(getDogsRoute);
+// router.use(getBreedRoute);
+// router.use(postDogRoute);
+// router.use(postDog);
+// router.use(getTemperamentsRoute);
 
 module.exports = router;

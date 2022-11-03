@@ -60,7 +60,7 @@ label {
 }
 
 .name-group {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .sub-label {
@@ -92,18 +92,39 @@ label {
   width: 45%;
 }
 
-.create-button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px 20px;
-    color: #f1e4ff;
-    background: #8c30f5;
-    border-radius: 6px;
-    border: none;
-    font-size: 0.8em;
-    font-weight: 500;
-    margin: 0 auto;
+.btn-create {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  color: #f1e4ff;
+  background: #8c30f5;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin: 0 auto;
+}
+
+.loading {
+  color: blue;
+  border-radius: 6px;
+  border: none;
+  font-size: 10px;
+  font-weight: 300;
+  padding: 4px 12px;
+  margin: 4px auto;
+}
+
+.error {
+  background: red;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  font-size: 10px;
+  font-weight: 300;
+  padding: 4px 12px;
+  margin: 4px auto;
 }
 
 .footer {

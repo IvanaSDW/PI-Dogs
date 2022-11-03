@@ -7,7 +7,7 @@
   text-transform: uppercase;
   color: #000000;
   display: block;
-  margin: 18px 18px;
+  margin: 18px 0;
 }
 
 .filter-form select {
@@ -72,18 +72,19 @@
 .filter-form .check-item {
   display: block;
   position: relative;
-  padding-left: 35px;
+  padding-left: 42px;
   margin-bottom: 12px;
   cursor: pointer;
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 24px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   color: #000;
+  text-transform: unset;
 }
 
 .check-item input {
@@ -140,4 +141,35 @@
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.create-breed-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 16px;
+  width: 100%;
+  height: 48px;
+  border: 1px solid #8c30f5;
+  border-radius: 6px;
+  margin-top: 36px;
+}
+
+.create-breed-button p {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  font-feature-settings: "salt" on, "liga" off;
+  color: #8c30f5;
+}
+
+.right-arrow {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
 }

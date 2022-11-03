@@ -31,10 +31,19 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-
-      life_span: {
-        type: DataTypes.STRING,
+      min_years: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
+      max_years: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+
+      // life_span: {
+      //   type: DataTypes.STRING,
+      // },
+      
       is_local: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

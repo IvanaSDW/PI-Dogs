@@ -240,14 +240,15 @@ const getBreedDetails = async (breedId) => {
 // };
 
 const createDog = async (reqBody) => {
-  console.log("body:", reqBody);
+
   const {
     name,
     min_height,
     max_height,
     min_weight,
     max_weight,
-    life_span,
+    min_years,
+    max_years,
     is_local,
     image_url,
     temperaments,
@@ -263,7 +264,9 @@ const createDog = async (reqBody) => {
       max_height,
       min_weight,
       max_weight,
-      life_span,
+      min_years,
+      max_years,
+      // life_span,
       is_local,
       image_url,
     },

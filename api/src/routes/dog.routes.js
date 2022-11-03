@@ -33,6 +33,7 @@ const getBreedRoute = (router) => {
 
 const postDogRoute = (router) => {
   router.post("/dogs", async (req, res) => {
+
     try {
       const newDog = await createDog(req.body);
       return res.status(200).json(newDog);

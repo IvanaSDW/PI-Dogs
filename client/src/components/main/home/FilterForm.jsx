@@ -1,9 +1,15 @@
 import "./filterForm.css";
+import rightArrow from "../../../assets/right-arrow.png";
+import { useHistory } from "react-router-dom";
 
 const FilterForm = () => {
+  const navigate = useHistory();
+  const onCreateBreed = () => {
+    navigate.push("/home/newBreed");
+  };
   return (
     <div>
-      <form action="submit" className="filter-form">
+      <form className="filter-form">
         <h3 className="form-title">Filters</h3>
         <div className="results-line">
           <p className="results">129 results</p>
@@ -41,6 +47,14 @@ const FilterForm = () => {
           <span className="checkmark"></span>
         </label>
       </form>
+      <button className="create-breed-button" onClick={() => onCreateBreed()}>
+        <p>Create Breed</p>
+          <img
+            className="right-arrow"
+            src={rightArrow}
+            alt="arrow"
+          />
+        </button>
     </div>
   );
 };
