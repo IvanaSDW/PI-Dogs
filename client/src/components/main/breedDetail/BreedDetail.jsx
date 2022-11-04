@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+
 import { useHistory } from "react-router-dom";
 import "./breedDetail.css";
 import leftArrow from "../../../assets/left-arrow.png";
@@ -11,20 +11,7 @@ const BreedDetail = (props) => {
   const { breedObj } = props;
 
   const navigate = useHistory();
-  useEffect(() => {
-    document.body.addEventListener("keydown", onEscapeKeyDown);
-    return function cleanUp() {
-      document.body.removeEventListener("keydown", onEscapeKeyDown);
-    };
-  }, []);
 
-  const { showingDetail, setShowDetail } = props;
-
-  const onEscapeKeyDown = (e) => {
-    if ((e.charCode || e.keyCode) === 27) {
-      setShowDetail(false);
-    }
-  };
 
   //   if (!showingDetail) return null;
 
@@ -44,7 +31,6 @@ const BreedDetail = (props) => {
                 className="arrow"
                 src={leftArrow}
                 alt="arrow"
-                onClick={() => setShowDetail(true)}
               />
               {"Back"}
             </button>

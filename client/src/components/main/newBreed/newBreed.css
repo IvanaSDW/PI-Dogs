@@ -8,7 +8,7 @@
 }
 
 .form-card {
-  width: 60%;
+  width: 70%;
   height: max-content;
   min-width: 700px;
   background-color: #fff;
@@ -19,13 +19,33 @@
   border-radius: 6px;
 }
 
+.card-header {
+  display: flex;
+  background-color: #f1e4ff;
+  align-items: center;
+}
+
 .card-title {
   font-size: 28px;
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
   padding-block: 24px;
-  background-color: #f1e4ff;
+  margin: 0 auto;
+}
+
+.back-btn {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  color: #8c30f5;
+  background-color: transparent;
+  border: none;
+  padding-left: 12px;
 }
 
 .card-body {
@@ -55,12 +75,44 @@ label {
   text-transform: uppercase;
   color: #000000;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   margin-top: 12px;
+}
+
+label.temperament-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .name-group {
   margin-top: 0;
+}
+
+.middle-body {
+  width: 100%;
+  display: flex;
+}
+
+.left-col {
+  width: 55%;
+  padding-right: 12px;
+}
+
+.right-col {
+  width: 45%;
+  padding-left: 12px;
+}
+
+.temps-list {
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.fab {
+  height: 24px;
+  filter: invert(27%) sepia(37%) saturate(7484%) hue-rotate(259deg);
 }
 
 .sub-label {
@@ -79,7 +131,7 @@ label {
 .form-control {
   width: 100%;
   margin-top: 2px;
-  margin-bottom: 16px;
+  margin-bottom: 2px;
 }
 
 .double-input {
@@ -90,6 +142,17 @@ label {
 
 .sub-input {
   width: 45%;
+  min-width: 32px;
+}
+
+.field-error {
+  margin-bottom: 16px;
+  color: red;
+  border-radius: 6px;
+  border: none;
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .btn-create {
@@ -97,13 +160,21 @@ label {
   flex-direction: row;
   align-items: center;
   padding: 10px 20px;
-  color: #f1e4ff;
-  background: #8c30f5;
   border-radius: 6px;
   border: none;
   font-size: 0.8em;
   font-weight: 500;
   margin: 0 auto;
+}
+
+.btn-create.enabled {
+  color: #f1e4ff;
+  background: #8c30f5;
+}
+
+.btn-create.disabled {
+  color: #D6B1FF;
+  background: #F1E4FF;
 }
 
 .loading {

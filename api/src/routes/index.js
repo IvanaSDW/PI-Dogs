@@ -7,7 +7,7 @@ const {
   postDogRoute,
 } = require("./dog.routes.js");
 
-const postDog = require("./postDog.js");
+// const postDog = require("./postDog.js");
 
 const { getTemperamentsRoute } = require("./temperament.routes.js");
 
