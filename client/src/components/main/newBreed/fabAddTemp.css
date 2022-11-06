@@ -1,0 +1,91 @@
+.fab {
+  position: relative;
+  top: 20px;
+  left: -25px;
+}
+
+.fab:hover .fab-pop-up {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fab:hover .fab-pop-up {
+  transform: translateY(-60px) translateX(-20px);
+}
+
+.fab-action-button {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 24px;
+  height: 24px;
+  background-color: #8c30f5;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 6px, rgba(0, 0, 0, 0.9) 2px 4px 4px;
+  font-weight: 300;
+  font-size: 24px;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-pop-up {
+  position: relative;
+  width: 160px;
+  height: 24px;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+  padding: 12px 16px;
+  align-items: center;
+  display: block;
+  justify-content: center;
+}
+
+.fab-input {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.control {
+  align-items: center;
+  padding: 0 6px;
+  width: 160px;
+  height: 32px;
+  background: #f4f5f7;
+  border-radius: 5px 0px 0px 5px;
+  border: 0.1 rem solid #32a1ce;
+  border-right: none;
+  font-size: 14px;
+}
+
+.submit-temp {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  align-items: center;
+  padding-left: 4px;
+  padding-right: 4px;
+  width: max-content;
+  height: 32px;
+  background: #18191f;
+  border-radius: 0px 5px 5px 0px;
+  color: #f4f5f7;
+}
+
+.add-temp-error {
+  width: max-content;
+  background-color: #fff;
+}
+
+.add-temp-success {
+  width: max-content;
+  margin-bottom: 16px;
+  color:green;
+  border-radius: 6px;
+  border: none;
+  font-size: 10px;
+  font-weight: 400;
+  font-style: italic;
+}

@@ -1,45 +1,59 @@
 import {
-  CREATING_BREED,
+  LOADING_DB_BREEDS,
   CREATE_BREED_DB_ERROR,
   CREATE_BREED_DB_SUCCESS,
-  GET_ALL_BREEDS,
   GET_BREEDS_BY_NAME,
   GET_BREED_BY_ID,
+  GET_ALL_BREEDS_SUCCESS,
+  GET_ALL_BREEDS_ERROR,
 } from "../types";
 
 const initialState = {
   breeds: [],
-  error: null,
-  loading: false,
+  breedDbError: null,
+  breedDbloading: false,
 };
 
-const breedReducer = (state = initialState, action) => {
+const breedsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATING_BREED: {
-      console.log("called");
+    case LOADING_DB_BREEDS:
       return {
         ...state,
-        loading: true,
+        breedDbloading: true,
       };
-    }
+
     case CREATE_BREED_DB_SUCCESS: {
-      console.log("called");
       return {
         ...state,
-        loading: false,
+        breedDbloading: false,
         breeds: [...state.breeds, action.payload],
+        breedDbError: false,
       };
     }
     case CREATE_BREED_DB_ERROR: {
       return {
         ...state,
-        loading: false,
-        error: action.payload,
+        breedDbloading: false,
+        breedDbError: action.payload,
       };
     }
+    case GET_ALL_BREEDS_SUCCESS:
+      return {
+        ...state,
+        breedDbloading: false,
+        breedDbError: false,
+        breeds: action.payload,
+      }
+      case GET_ALL_BREEDS_ERROR:
+        return {
+          ...state,
+          breedDbloading: false,
+          breedDbError: action.payload,
+        }
+
     default:
       return state;
   }
 };
 
-export default breedReducer;
+export default breedsReducer;

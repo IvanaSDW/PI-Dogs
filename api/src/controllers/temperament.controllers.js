@@ -8,7 +8,7 @@ const getAllApiBreedsFullDetail = async () => {
     );
     return apiDogs.data;
   } catch (error) {
-    throw new Error(error.message);
+    console.log("error getting all breeds from external api: ", error);
   }
 };
 
@@ -26,14 +26,36 @@ const fetchApiTemperaments = async () => {
 };
 
 const getAllTemperaments = async () => {
-  await fetchApiTemperaments();
+  // await fetchApiTemperaments();
   try {
     return await Temperament.findAll();
   } catch (error) {
-    console.log("error: ", error.message);
+    console.log("error getting all temperaments from local db: ", error);
+  }
+};
+
+const createTemperament = async (temperament) => {
+  console.log("createTemperament called for: ", temperament);
+  try {
+    const [newTemp, created] = await Temperament.findOrCreate({
+      where: {
+        name: temperament,
+      },
+    });
+
+    if (created) {
+      return newTemp;
+    } else {
+      throw new Error(`${temperament} already exists. Nothing was created.`); //This error get catched in catch block
+    }
+
+  } catch (error) {
+    console.log('error from createTemperament controller: ', error);
+    return error;
   }
 };
 
 module.exports = {
   getAllTemperaments,
+  createTemperament,
 };

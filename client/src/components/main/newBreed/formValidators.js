@@ -24,7 +24,6 @@ export const validateName = (value, setErr) => {
 };
 
 const validateNumericField = (value) => {
-
   if (typeof value !== "number") {
     return {
       touched: true,
@@ -98,7 +97,6 @@ export const validateWeight = (
   minTouched,
   maxTouched
 ) => {
-  console.log("touched min/max:", minTouched, "/", maxTouched);
   const minWeightErr = validateNumericField(minVal);
   const maxWeightErr = validateNumericField(maxVal);
   if (!minWeightErr.error && !maxWeightErr.error) {
@@ -142,7 +140,6 @@ export const validateYears = (
   minTouched,
   maxTouched
 ) => {
-  console.log("touched min/max:", minTouched, "/", maxTouched);
   const minYearsErr = validateNumericField(minVal);
   const maxYearsErr = validateNumericField(maxVal);
   if (!minYearsErr.error && !maxYearsErr.error) {
@@ -154,7 +151,7 @@ export const validateYears = (
           max_years: {
             touched: true,
             error: true,
-            message: "Max weight should be higher than min weight.",
+            message: "Max years should be higher than min years.",
           },
         };
       });
@@ -177,4 +174,74 @@ export const validateYears = (
       };
     });
   }
+};
+
+export const validateTemperaments = (value, setErr) => {
+  if (!Array.isArray(value)) {
+    setErr((prevErr) => {
+      return {
+        ...prevErr,
+        temperaments: {
+          ...prevErr.temperaments,
+          error: true,
+          message: "This is not an array",
+        },
+      };
+    });
+    return;
+  }
+
+  if (value.length < 1) {
+    setErr((prevErr) => {
+      return {
+        ...prevErr,
+        temperaments: {
+          ...prevErr.temperaments,
+          error: true,
+          message: "Please add at least one temperament",
+        },
+      };
+    });
+    console.log('validated temperamentes when lenght was: ', value.length)
+    return;
+  }
+
+  setErr((prevErr) => {
+    return {
+      ...prevErr,
+      temperaments: {
+        ...prevErr.temperaments,
+        error: false,
+        message: "",
+      },
+    };
+  });
+};
+
+export const validateAll = (formState, fieldErrors, setErr) => {
+  if (fieldErrors.name.touched) validateName(formState.name, setErr);
+  validateHeight(
+    formState.min_height,
+    formState.max_height,
+    setErr,
+    fieldErrors.min_height.touched,
+    fieldErrors.max_height.touched
+  );
+  validateWeight(
+    formState.min_weight,
+    formState.max_weight,
+    setErr,
+    fieldErrors.min_weight.touched,
+    fieldErrors.max_weight.touched
+  );
+  validateYears(
+    formState.min_years,
+    formState.max_years,
+    setErr,
+    fieldErrors.min_years.touched,
+    fieldErrors.max_years.touched
+  );
+
+  if (fieldErrors.temperaments.touched)
+    validateTemperaments(formState.temperaments, setErr);
 };

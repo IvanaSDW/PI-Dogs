@@ -10,14 +10,22 @@ import {
   validateName,
   validateWeight,
   validateYears,
+  validateTemperaments,
+  validateAll,
 } from "./formValidators";
-import { useHistory } from "react-router-dom";
+import TempCard from "./TempCard";
+import FabAddTemp from "./FabAddTemp";
+import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
 
-const NewBreed = () => {
-  const navigate = useHistory();
-
+const NewBreed = ({ history }) => {
   //Redux state
-  const { loading, error: networkError } = useSelector((state) => state.breed);
+  const { breedDbloading, breedDbError: networkError } = useSelector(
+    (state) => state.breeds
+  );
+
+  const { temperaments, tempDbLoading, tempsDbError } = useSelector(
+    (state) => state.temps
+  );
 
   //Local states
   const [newBreedObj, setNewBreedObj] = useState({
@@ -29,6 +37,7 @@ const NewBreed = () => {
     max_weight: "",
     min_years: "",
     max_years: "",
+    temperaments: [],
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -39,28 +48,41 @@ const NewBreed = () => {
     max_weight: { touched: false, error: false, message: "" },
     min_years: { touched: false, error: false, message: "" },
     max_years: { touched: false, error: false, message: "" },
+    temperaments: { touched: false, error: false, message: "" },
   });
 
   const [formValidate, setFormValidate] = useState(false);
 
   /* */
 
-  const forbiddenChars = ["e", "-", "+", "."];
+  const forbiddenChars = ["e", "-", "+", "."]; // Avoid in numeric fields
 
   useEffect(() => {
+    console.log("newBreedObj changed");
+    validateAll(newBreedObj, fieldErrors, setFieldErrors);
+  }, [newBreedObj]);
+
+  useEffect(() => {
+    console.log("newBreedObj changed");
     let allTouched = true;
     let someError = false;
+    console.log('Temp error is currently: ', fieldErrors.temperaments.error);
+    console.log('Name error is currently: ', fieldErrors.name.error);
     for (const field in fieldErrors) {
       if (fieldErrors[field].error) someError = true;
       if (!fieldErrors[field].touched) allTouched = false;
     }
+    console.log("AllTouched: ", allTouched);
+    console.log("SomeError: ", someError);
     if (allTouched) {
-      setFormValidate(!someError);
+      setFormValidate(prevValidate => {
+        return !someError;})
     }
-  }, [fieldErrors]);
+  }, [fieldErrors])
 
+  // Reset form after sucessfully created new breed
   useEffect(() => {
-    if (!networkError && !loading) {
+    if (!networkError && !breedDbloading) {
       setNewBreedObj((prevObj) => {
         return {
           ...prevObj,
@@ -71,6 +93,7 @@ const NewBreed = () => {
           max_weight: "",
           min_years: "",
           max_years: "",
+          temperaments: [],
         };
       });
       setFieldErrors((prevErr) => {
@@ -83,13 +106,47 @@ const NewBreed = () => {
           max_weight: { touched: false, error: false, message: "" },
           min_years: { touched: false, error: false, message: "" },
           max_years: { touched: false, error: false, message: "" },
+          temperaments: { touched: false, error: false, message: "" },
         };
       });
     }
-  }, [networkError, loading]);
+  }, [networkError, breedDbloading]);
 
   const dispatch = useDispatch();
   const createBreed = () => dispatch(createBreedAction(newBreedObj));
+
+  const onTemperamentSelected = (e) => {
+    console.log('OnChange called in select temp');
+    setFieldErrors((prevErr) => {
+      return {
+        ...prevErr,
+        temperaments: {
+          ...prevErr.temperaments,
+          touched: true,
+        },
+      };
+    });
+    setNewBreedObj((prevObj) => {
+      return {
+        ...prevObj,
+        temperaments: [...prevObj.temperaments, e.target.value],
+      };
+    });
+  };
+
+  const onRemoveTemp = (temp) => {
+    const indexToremove = newBreedObj.temperaments.indexOf(temp);
+    console.log("temp to remove: ", indexToremove);
+    setNewBreedObj((prevObj) => {
+      return {
+        ...prevObj,
+        temperaments: prevObj.temperaments.filter((item) => item !== temp),
+      };
+    });
+  };
+
+  const onCreateNewTemperament = (temperament) =>
+    dispatch(createTemperamentAction(temperament));
 
   const handleInput = (e) => {
     let inputField = e.target.name;
@@ -105,19 +162,16 @@ const NewBreed = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validate form
-
-    //If no errors
-    createBreed();
+    formValidate && createBreed();
   };
+
   return (
     <div>
       <NavBar />
       <div className="new-breed-screen">
         <div className="form-card">
           <div className="card-header">
-            <button className="back-btn" onClick={() => navigate.goBack()}>
+            <button className="back-btn" onClick={() => history.goBack()}>
               <img className="arrow" src={leftArrow} alt="arrow" />
               {"Back"}
             </button>
@@ -126,7 +180,7 @@ const NewBreed = () => {
 
           <div className="card-body">
             <img
-              src="https://placedog.net/300/340?r"
+              src="https://placedog.net/600/600?r"
               alt="new breed"
               className="new-breed-image"
             />
@@ -142,7 +196,18 @@ const NewBreed = () => {
                   name="name"
                   value={newBreedObj.name}
                   onChange={handleInput}
-                  onBlur={(e) => validateName(e.target.value, setFieldErrors)}
+                  // onBlur={(e) => validateName(e.target.value, setFieldErrors)}
+                  onBlur={(e) =>
+                    setFieldErrors((prevErr) => {
+                      return {
+                        ...prevErr,
+                        name: {
+                          ...prevErr.name,
+                          touched: true,
+                        },
+                      };
+                    })
+                  }
                 />
                 <div className="field-error">
                   <p className="error-text">{fieldErrors.name.message}</p>
@@ -171,14 +236,25 @@ const NewBreed = () => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_height}
-                          onBlur={() =>
-                            validateHeight(
-                              newBreedObj.min_height,
-                              newBreedObj.max_height,
-                              setFieldErrors,
-                              true,
-                              fieldErrors.max_height.touched
-                            )
+                          // onBlur={() =>
+                          //   validateHeight(
+                          //     newBreedObj.min_height,
+                          //     newBreedObj.max_height,
+                          //     setFieldErrors,
+                          //     true,
+                          //     fieldErrors.max_height.touched
+                          //   )
+                          // }
+                          onBlur={(e) =>
+                            setFieldErrors((prevErr) => {
+                              return {
+                                ...prevErr,
+                                min_height: {
+                                  ...prevErr.min_height,
+                                  touched: true,
+                                },
+                              };
+                            })
                           }
                         />
                         <div className="field-error">
@@ -205,14 +281,25 @@ const NewBreed = () => {
                             forbiddenChars.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
+                          // onBlur={(e) =>
+                          //   validateHeight(
+                          //     newBreedObj.min_height,
+                          //     newBreedObj.max_height,
+                          //     setFieldErrors,
+                          //     fieldErrors.min_height.touched,
+                          //     true
+                          //   )
+                          // }
                           onBlur={(e) =>
-                            validateHeight(
-                              newBreedObj.min_height,
-                              newBreedObj.max_height,
-                              setFieldErrors,
-                              fieldErrors.min_height.touched,
-                              true
-                            )
+                            setFieldErrors((prevErr) => {
+                              return {
+                                ...prevErr,
+                                max_height: {
+                                  ...prevErr.max_height,
+                                  touched: true,
+                                },
+                              };
+                            })
                           }
                         />
                         <div className="field-error">
@@ -244,14 +331,25 @@ const NewBreed = () => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_weight}
+                          // onBlur={(e) =>
+                          //   validateWeight(
+                          //     newBreedObj.min_weight,
+                          //     newBreedObj.max_weight,
+                          //     setFieldErrors,
+                          //     true,
+                          //     fieldErrors.max_weight.touched
+                          //   )
+                          // }
                           onBlur={(e) =>
-                            validateWeight(
-                              newBreedObj.min_weight,
-                              newBreedObj.max_weight,
-                              setFieldErrors,
-                              true,
-                              fieldErrors.max_weight.touched
-                            )
+                            setFieldErrors((prevErr) => {
+                              return {
+                                ...prevErr,
+                                min_weight: {
+                                  ...prevErr.min_weight,
+                                  touched: true,
+                                },
+                              };
+                            })
                           }
                         />
                         <div className="field-error">
@@ -278,14 +376,25 @@ const NewBreed = () => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_weight}
+                          // onBlur={(e) =>
+                          //   validateWeight(
+                          //     newBreedObj.min_weight,
+                          //     newBreedObj.max_weight,
+                          //     setFieldErrors,
+                          //     fieldErrors.min_weight.touched,
+                          //     true
+                          //   )
+                          // }
                           onBlur={(e) =>
-                            validateWeight(
-                              newBreedObj.min_weight,
-                              newBreedObj.max_weight,
-                              setFieldErrors,
-                              fieldErrors.min_weight.touched,
-                              true
-                            )
+                            setFieldErrors((prevErr) => {
+                              return {
+                                ...prevErr,
+                                max_weight: {
+                                  ...prevErr.max_weight,
+                                  touched: true,
+                                },
+                              };
+                            })
                           }
                         />
                         <div className="field-error">
@@ -317,14 +426,25 @@ const NewBreed = () => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_years}
+                          // onBlur={(e) =>
+                          //   validateYears(
+                          //     newBreedObj.min_years,
+                          //     newBreedObj.max_years,
+                          //     setFieldErrors,
+                          //     true,
+                          //     fieldErrors.max_years.touched
+                          //   )
+                          // }
                           onBlur={(e) =>
-                            validateYears(
-                              newBreedObj.min_years,
-                              newBreedObj.max_years,
-                              setFieldErrors,
-                              true,
-                              fieldErrors.max_years.touched
-                            )
+                            setFieldErrors((prevErr) => {
+                              return {
+                                ...prevErr,
+                                min_years: {
+                                  ...prevErr.min_years,
+                                  touched: true,
+                                },
+                              };
+                            })
                           }
                         />
                         <div className="field-error">
@@ -351,14 +471,25 @@ const NewBreed = () => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_years}
+                          // onBlur={(e) =>
+                          //   validateYears(
+                          //     newBreedObj.min_years,
+                          //     newBreedObj.max_years,
+                          //     setFieldErrors,
+                          //     fieldErrors.min_years.touched,
+                          //     true
+                          //   )
+                          // }
                           onBlur={(e) =>
-                            validateYears(
-                              newBreedObj.min_years,
-                              newBreedObj.max_years,
-                              setFieldErrors,
-                              fieldErrors.min_years.touched,
-                              true
-                            )
+                            setFieldErrors((prevErr) => {
+                              return {
+                                ...prevErr,
+                                max_years: {
+                                  ...prevErr.max_years,
+                                  touched: true,
+                                },
+                              };
+                            })
                           }
                         />
                         <div className="field-error">
@@ -371,19 +502,57 @@ const NewBreed = () => {
                   </div>
                 </div>
                 <div className="right-col">
+                  <FabAddTemp onAdd={onCreateNewTemperament} />
                   <div className="form-group">
                     <label htmlFor="temperaments" className="temperament-group">
                       Temperaments
-                      <img
-                      className="fab"
-                      src={
-                        require("../../../assets/circle-plus-solid.svg").default
-                      }
-                      alt="fab"
-                    />
                     </label>
+
+                    <div className="field-error">
+                      <p className="error-text">
+                        {fieldErrors.temperaments.message}
+                      </p>
+                    </div>
+                    <select
+                      name="temperaments"
+                      id="select-temps"
+                      className="temp-select form-control"
+                      value={""}
+                      onChange={onTemperamentSelected}
+                      onBlur={(e) => {
+                        console.log('onblur in select called');
+                        setFieldErrors((prevErr) => {
+                          return {
+                            ...prevErr,
+                            temperaments: {
+                              ...prevErr.temperaments,
+                              touched: true,
+                            },
+                          };
+                        });
+                      }}
+                    >
+                      <option key={0} value={""}>
+                        --select temperaments--
+                      </option>
+                      {temperaments.map((temp) => {
+                        return (
+                          <option key={temp.id} value={temp.name}>
+                            {temp.name}
+                          </option>
+                        );
+                      })}
+                    </select>
                     <div className="temps-list">
-                      Temperaments will add here...
+                      {newBreedObj.temperaments.map((temp) => {
+                        return (
+                          <TempCard
+                            key={temp}
+                            temperament={temp}
+                            onRemoveTemp={onRemoveTemp}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -399,11 +568,11 @@ const NewBreed = () => {
                 Create
               </button>
               <div
-                className={`${loading ? "loading" : ""} ${
+                className={`${breedDbloading ? "loading" : ""} ${
                   networkError ? "error" : ""
                 }`}
               >
-                {loading ? "L O A D I N G ..." : null}
+                {breedDbloading ? <p>L O A D I N G . . .</p> : null}
                 {networkError ? <p>{networkError.message}</p> : null}
               </div>
             </form>

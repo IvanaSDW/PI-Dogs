@@ -4,8 +4,8 @@ import "./home.css";
 import FilterForm from "./FilterForm";
 import Footer from "../../footer/Footer.jsx";
 
-
 const Home = () => {
+
 
   return (
     <div className="mainContainer">

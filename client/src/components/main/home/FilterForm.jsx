@@ -1,12 +1,19 @@
 import "./filterForm.css";
 import rightArrow from "../../../assets/right-arrow.png";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
 
 const FilterForm = () => {
   const navigate = useHistory();
-  const onCreateBreed = () => {
+
+  const temperaments = useSelector((state) => state.temps.temperaments);
+
+  const onCreateBreedClicked = () => {
     navigate.push("/home/newBreed");
   };
+
+
   return (
     <div>
       <form className="filter-form">
@@ -23,14 +30,11 @@ const FilterForm = () => {
           name="temperament"
           id="input-temperament"
           className="temperament-select"
-          defaultValue={0}
         >
-          <option value="0" disabled="disabled">
-            Select temperament
-          </option>
-          <option value="1">Select 1</option>
-          <option value="2">Select 2</option>
-          <option value="3">Select 3</option>
+          <option key='0' value={0}>Select temperament</option>
+          {temperaments.map((temp) => {
+            return <option key={temp.id} value={temp.id}>{temp.name}</option>;
+          })}
         </select>
         <div className="form-divider"></div>
         <h4 htmlFor="input-source" className="form-label">
@@ -47,14 +51,13 @@ const FilterForm = () => {
           <span className="checkmark"></span>
         </label>
       </form>
-      <button className="create-breed-button" onClick={() => onCreateBreed()}>
+      <button
+        className="create-breed-button"
+        onClick={() => onCreateBreedClicked()}
+      >
         <p>Create Breed</p>
-          <img
-            className="right-arrow"
-            src={rightArrow}
-            alt="arrow"
-          />
-        </button>
+        <img className="right-arrow" src={rightArrow} alt="arrow" />
+      </button>
     </div>
   );
 };

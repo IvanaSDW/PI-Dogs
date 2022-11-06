@@ -1,9 +1,9 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import DogCard from "../home/DogCard.jsx";
 import "./dogGrid.css";
 
-const DogGrid = (props) => {
+const DogGrid = () => {
+
 
   return (
     <>

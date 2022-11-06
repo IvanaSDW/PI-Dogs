@@ -1,6 +1,8 @@
-import breedReducer from "./BreedReducer";
+import breedsReducer from "./BreedReducer";
+import tempsReducer from "./TemperamentReducer";
 import { combineReducers } from 'redux'
 
 export default combineReducers({
-    breed: breedReducer
+    breeds: breedsReducer,
+    temps: tempsReducer
 })
