@@ -3,6 +3,13 @@
   height: max-content;
   padding: 22px;
   background-color: blueviolet;
+  /* align-items: center;
+  display: block;
+  justify-content: center;
+  justify-items: center; */
+}
+
+.search-line {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -41,4 +48,42 @@
   background: #18191f;
   border-radius: 0px 5px 5px 0px;
   color: #f4f5f7;
+}
+
+.error-container {
+  justify-content: center;
+  width: max-content;
+  margin: auto;
+  margin-top: 6px;
+  padding: 1px 8px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: red;
+  border-radius: 6px;
+  border: none;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.network-error {
+  justify-content: center;
+  width: max-content;
+  margin: auto;
+  margin-top: 6px;
+  padding: 1px 8px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: red;
+  border-radius: 6px;
+  border: none;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.error-visible {
+  visibility: visible;
+}
+
+.error-hidden {
+  visibility: collapse;
 }

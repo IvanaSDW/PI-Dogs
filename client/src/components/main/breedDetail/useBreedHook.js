@@ -13,7 +13,6 @@ export const useBreed = (breedId) => {
 
       fetchBreedData(breedId).then(breedData => {
         let breedObj = {};
-        console.log('prefix: ', breedId.slice(0,3));
         if (breedId.slice(0,3) === 'api') {
             breedObj = {
                 name: breedData.name,

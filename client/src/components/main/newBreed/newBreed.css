@@ -208,7 +208,7 @@ label.temperament-group {
   background: #f1e4ff;
 }
 
-.loading {
+.LOADING {
   color: blue;
   border-radius: 6px;
   border: none;
@@ -218,8 +218,30 @@ label.temperament-group {
   margin: 4px auto;
 }
 
-.error {
+.ERROR {
   background: red;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  font-size: 10px;
+  font-weight: 300;
+  padding: 4px 12px;
+  margin: 4px auto;
+}
+
+.SUCCESS {
+  background: green;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  font-size: 10px;
+  font-weight: 300;
+  padding: 4px 12px;
+  margin: 4px auto;
+}
+
+.UPDATING_BREEDS {
+  background: green;
   color: #fff;
   border-radius: 6px;
   border: none;

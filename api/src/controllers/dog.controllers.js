@@ -3,17 +3,20 @@ const { Op } = require("sequelize");
 const { Dog, Temperament } = require("../db.js");
 
 const getAllLocalDogs = async () => {
-  const breedList = await Dog.findAll({
-    include: Temperament,
-    attributes: [
-      "id",
-      "image_url",
-      "name",
-      "min_weight",
-      "max_weight",
-      "is_local",
-    ],
-  });
+  
+    const breedList = await Dog.findAll({
+      include: Temperament,
+      attributes: [
+        "id",
+        "image_url",
+        "name",
+        "min_weight",
+        "max_weight",
+        "is_local",
+      ],
+      order: [["name", "ASC"]],
+    });
+  
 
   const mappedDogs = breedList.map((breed) => {
     const thisTemps = breed.temperaments.map((temp) => {
@@ -83,6 +86,7 @@ const getLocalDogsByBreed = async (breed) => {
     where: {
       name: { [Op.iLike]: `%${breed}%` },
     },
+    order: [["name", "ASC"]],
   });
 };
 

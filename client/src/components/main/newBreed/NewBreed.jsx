@@ -3,7 +3,10 @@ import leftArrow from "../../../assets/left-arrow.png";
 import Footer from "../../footer/Footer";
 import NavBar from "../../header/NavBar";
 import { useDispatch, useSelector } from "react-redux";
-import { createBreedAction } from "../../../redux/actions/breedActions";
+import {
+  createBreedAction,
+  getAllBreedsAction,
+} from "../../../redux/actions/breedActions";
 import { useEffect, useState } from "react";
 import { validateAll } from "./formValidators";
 import TempCard from "./TempCard";
@@ -11,16 +14,61 @@ import FabAddTemp from "./FabAddTemp";
 import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
 
 const NewBreed = ({ history }) => {
+
   //Redux state
   const { breedDbloading, breedDbError: networkError } = useSelector(
     (state) => state.breeds
   );
 
-  const { temperaments } = useSelector(
-    (state) => state.temps
-  );
+  const { temperaments } = useSelector((state) => state.temps);
 
   //Local states
+
+  const Cycle = {
+    READY: "READY",
+    SET: "SET",
+    LOADING: "LOADING",
+    ERROR: "ERROR",
+    SUCCESS: "SUCCESS",
+    UPDATING_BREEDS: "UPDATING_BREEDS",
+  };
+
+  const [cycleState, setCycleState] = useState(Cycle.SET);
+
+  useEffect(() => {
+    if (cycleState === Cycle.UPDATING_BREEDS) return;
+    if (networkError) {
+      setCycleState(Cycle.ERROR);
+    } else {
+      if (cycleState === Cycle.LOADING) {
+        setCycleState(Cycle.SUCCESS);
+      }
+    }
+    if (breedDbloading) {
+      setCycleState(Cycle.LOADING);
+    }
+  }, [networkError, breedDbloading]);
+
+  const renderNetworkMessage = (cycleState) => {
+    switch (cycleState) {
+      case Cycle.READY:
+        return "";
+      case Cycle.LOADING:
+        return "L O A D I N G . . .";
+      case Cycle.ERROR:
+        return networkError.message;
+      case Cycle.SUCCESS:
+      case Cycle.UPDATING_BREEDS:
+        return `New breed succesfully added!`;
+      default:
+        return "";
+    }
+  };
+
+  const resetNetworkMessage = () => {
+    setCycleState(Cycle.SET);
+  };
+
   const [newBreedObj, setNewBreedObj] = useState({
     is_local: true,
     name: "",
@@ -51,22 +99,16 @@ const NewBreed = ({ history }) => {
   const forbiddenChars = ["e", "-", "+", "."]; // Avoid in numeric fields
 
   useEffect(() => {
-    console.log("newBreedObj changed");
     validateAll(newBreedObj, fieldErrors, setFieldErrors);
   }, [newBreedObj]);
 
   useEffect(() => {
-    console.log("newBreedObj changed");
     let allTouched = true;
     let someError = false;
-    console.log("Temp error is currently: ", fieldErrors.temperaments.error);
-    console.log("Name error is currently: ", fieldErrors.name.error);
     for (const field in fieldErrors) {
       if (fieldErrors[field].error) someError = true;
       if (!fieldErrors[field].touched) allTouched = false;
     }
-    console.log("AllTouched: ", allTouched);
-    console.log("SomeError: ", someError);
     if (allTouched) {
       setFormValidate((prevValidate) => {
         return !someError;
@@ -74,9 +116,11 @@ const NewBreed = ({ history }) => {
     }
   }, [fieldErrors]);
 
-  // Reset form after sucessfully created new breed
+  // After sucessfully created new breed:
   useEffect(() => {
-    if (!networkError && !breedDbloading) {
+    if (cycleState === Cycle.SUCCESS) {
+      setCycleState(Cycle.UPDATING_BREEDS);
+      dispatch(getAllBreedsAction());
       setNewBreedObj((prevObj) => {
         return {
           ...prevObj,
@@ -104,13 +148,12 @@ const NewBreed = ({ history }) => {
         };
       });
     }
-  }, [networkError, breedDbloading]);
+  }, [cycleState]);
 
   const dispatch = useDispatch();
   const createBreed = () => dispatch(createBreedAction(newBreedObj));
 
   const onTemperamentSelected = (e) => {
-    console.log("OnChange called in select temp");
     setFieldErrors((prevErr) => {
       return {
         ...prevErr,
@@ -126,17 +169,17 @@ const NewBreed = ({ history }) => {
         temperaments: [...prevObj.temperaments, e.target.value],
       };
     });
+    resetNetworkMessage();
   };
 
   const onRemoveTemp = (temp) => {
-    const indexToremove = newBreedObj.temperaments.indexOf(temp);
-    console.log("temp to remove: ", indexToremove);
     setNewBreedObj((prevObj) => {
       return {
         ...prevObj,
         temperaments: prevObj.temperaments.filter((item) => item !== temp),
       };
     });
+    resetNetworkMessage();
   };
 
   const onCreateNewTemperament = (temperament) =>
@@ -152,11 +195,12 @@ const NewBreed = ({ history }) => {
     setNewBreedObj((prevObj) => {
       return { ...prevObj, [inputField]: inputValue };
     });
+    resetNetworkMessage();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    formValidate && createBreed();
+    if (formValidate) createBreed();
   };
 
   return (
@@ -230,15 +274,6 @@ const NewBreed = ({ history }) => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_height}
-                          // onBlur={() =>
-                          //   validateHeight(
-                          //     newBreedObj.min_height,
-                          //     newBreedObj.max_height,
-                          //     setFieldErrors,
-                          //     true,
-                          //     fieldErrors.max_height.touched
-                          //   )
-                          // }
                           onBlur={(e) =>
                             setFieldErrors((prevErr) => {
                               return {
@@ -275,15 +310,6 @@ const NewBreed = ({ history }) => {
                             forbiddenChars.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
-                          // onBlur={(e) =>
-                          //   validateHeight(
-                          //     newBreedObj.min_height,
-                          //     newBreedObj.max_height,
-                          //     setFieldErrors,
-                          //     fieldErrors.min_height.touched,
-                          //     true
-                          //   )
-                          // }
                           onBlur={(e) =>
                             setFieldErrors((prevErr) => {
                               return {
@@ -325,15 +351,6 @@ const NewBreed = ({ history }) => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_weight}
-                          // onBlur={(e) =>
-                          //   validateWeight(
-                          //     newBreedObj.min_weight,
-                          //     newBreedObj.max_weight,
-                          //     setFieldErrors,
-                          //     true,
-                          //     fieldErrors.max_weight.touched
-                          //   )
-                          // }
                           onBlur={(e) =>
                             setFieldErrors((prevErr) => {
                               return {
@@ -370,15 +387,6 @@ const NewBreed = ({ history }) => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_weight}
-                          // onBlur={(e) =>
-                          //   validateWeight(
-                          //     newBreedObj.min_weight,
-                          //     newBreedObj.max_weight,
-                          //     setFieldErrors,
-                          //     fieldErrors.min_weight.touched,
-                          //     true
-                          //   )
-                          // }
                           onBlur={(e) =>
                             setFieldErrors((prevErr) => {
                               return {
@@ -420,15 +428,6 @@ const NewBreed = ({ history }) => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_years}
-                          // onBlur={(e) =>
-                          //   validateYears(
-                          //     newBreedObj.min_years,
-                          //     newBreedObj.max_years,
-                          //     setFieldErrors,
-                          //     true,
-                          //     fieldErrors.max_years.touched
-                          //   )
-                          // }
                           onBlur={(e) =>
                             setFieldErrors((prevErr) => {
                               return {
@@ -465,15 +464,6 @@ const NewBreed = ({ history }) => {
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_years}
-                          // onBlur={(e) =>
-                          //   validateYears(
-                          //     newBreedObj.min_years,
-                          //     newBreedObj.max_years,
-                          //     setFieldErrors,
-                          //     fieldErrors.min_years.touched,
-                          //     true
-                          //   )
-                          // }
                           onBlur={(e) =>
                             setFieldErrors((prevErr) => {
                               return {
@@ -514,7 +504,6 @@ const NewBreed = ({ history }) => {
                       value={""}
                       onChange={onTemperamentSelected}
                       onBlur={(e) => {
-                        console.log("onblur in select called");
                         setFieldErrors((prevErr) => {
                           return {
                             ...prevErr,
@@ -561,13 +550,8 @@ const NewBreed = ({ history }) => {
               >
                 Create
               </button>
-              <div
-                className={`${breedDbloading ? "loading" : ""} ${
-                  networkError ? "error" : ""
-                }`}
-              >
-                {breedDbloading ? <p>L O A D I N G . . .</p> : null}
-                {networkError ? <p>{networkError.message}</p> : null}
+              <div className={`network-message ${cycleState}`}>
+                <p>{renderNetworkMessage(cycleState)}</p>
               </div>
             </form>
           </div>
@@ -579,5 +563,6 @@ const NewBreed = ({ history }) => {
     </div>
   );
 };
+
 
 export default NewBreed;

@@ -6,7 +6,6 @@ import Footer from "../../footer/Footer.jsx";
 
 const Home = () => {
 
-
   return (
     <div className="mainContainer">
       <div className="header">
