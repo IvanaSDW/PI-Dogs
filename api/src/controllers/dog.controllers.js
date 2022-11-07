@@ -2,9 +2,8 @@ const axios = require("axios");
 const { Op } = require("sequelize");
 const { Dog, Temperament } = require("../db.js");
 
-
 const getAllLocalDogs = async () => {
-  return await Dog.findAll({
+  const breedList = await Dog.findAll({
     include: Temperament,
     attributes: [
       "id",
@@ -15,6 +14,18 @@ const getAllLocalDogs = async () => {
       "is_local",
     ],
   });
+
+  const mappedDogs = breedList.map((breed) => {
+    const thisTemps = breed.temperaments.map((temp) => {
+      return temp.dataValues.name;
+    });
+    const mappedDog = {
+      ...breed.dataValues,
+      temperaments: thisTemps,
+    };
+    return mappedDog;
+  });
+  return mappedDogs;
 };
 
 const getAllApiDogs = async () => {
@@ -34,7 +45,7 @@ const getAllApiDogs = async () => {
         });
         return temperament.trim();
       });
-      newDog = {
+      let newDog = {
         id: `api${breed.id}`,
         name: breed.name,
         min_weight: min_weight,
@@ -240,7 +251,6 @@ const getBreedDetails = async (breedId) => {
 // };
 
 const createDog = async (reqBody) => {
-
   const {
     name,
     min_height,
@@ -283,9 +293,10 @@ const createDog = async (reqBody) => {
     }
     return newDog;
   } else {
-    throw new Error(`A breed named ${name} aleady exists. Nothing was created.`);
+    throw new Error(
+      `A breed named ${name} aleady exists. Nothing was created.`
+    );
   }
-
 };
 
 module.exports = {

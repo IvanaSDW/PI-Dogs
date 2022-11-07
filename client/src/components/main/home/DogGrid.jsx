@@ -1,21 +1,18 @@
-import React from "react";
+import { useSelector } from "react-redux";
 import DogCard from "../home/DogCard.jsx";
 import "./dogGrid.css";
 
 const DogGrid = () => {
-
+  const { breeds, breedDbError, breedDbloading } = useSelector(
+    (state) => state.breeds
+  );
 
   return (
     <>
       <div className="gridContainer">
-        <DogCard />
-        <DogCard />
-        <DogCard />
-        <DogCard />
-        <DogCard />
-        <DogCard />
-        <DogCard />
-        <DogCard />
+        {breeds.map((breed) => {
+          return <DogCard key={breed.id} breed={breed}/>;
+        })}
       </div>
       <div className="pagination-divider"></div>
       <div className="pagination">

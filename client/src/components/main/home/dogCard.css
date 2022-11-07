@@ -3,7 +3,7 @@
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: #F1E4FF;
-
+  position: relative;
 }
 
 .dog-card:hover {
@@ -24,7 +24,7 @@
   margin-bottom: 4px;
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   color:#8c30f5;
 }
 
@@ -37,9 +37,13 @@
   letter-spacing: 1px;
   color: #393a47;
   text-align: justify;
+  min-height: 48px;
 }
 
 .caption-line {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
   padding-inline: 12px;
   margin-bottom: 6px;
   display: flex;

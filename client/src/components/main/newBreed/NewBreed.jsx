@@ -5,14 +5,7 @@ import NavBar from "../../header/NavBar";
 import { useDispatch, useSelector } from "react-redux";
 import { createBreedAction } from "../../../redux/actions/breedActions";
 import { useEffect, useState } from "react";
-import {
-  validateHeight,
-  validateName,
-  validateWeight,
-  validateYears,
-  validateTemperaments,
-  validateAll,
-} from "./formValidators";
+import { validateAll } from "./formValidators";
 import TempCard from "./TempCard";
 import FabAddTemp from "./FabAddTemp";
 import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
@@ -23,7 +16,7 @@ const NewBreed = ({ history }) => {
     (state) => state.breeds
   );
 
-  const { temperaments, tempDbLoading, tempsDbError } = useSelector(
+  const { temperaments } = useSelector(
     (state) => state.temps
   );
 
@@ -66,8 +59,8 @@ const NewBreed = ({ history }) => {
     console.log("newBreedObj changed");
     let allTouched = true;
     let someError = false;
-    console.log('Temp error is currently: ', fieldErrors.temperaments.error);
-    console.log('Name error is currently: ', fieldErrors.name.error);
+    console.log("Temp error is currently: ", fieldErrors.temperaments.error);
+    console.log("Name error is currently: ", fieldErrors.name.error);
     for (const field in fieldErrors) {
       if (fieldErrors[field].error) someError = true;
       if (!fieldErrors[field].touched) allTouched = false;
@@ -75,10 +68,11 @@ const NewBreed = ({ history }) => {
     console.log("AllTouched: ", allTouched);
     console.log("SomeError: ", someError);
     if (allTouched) {
-      setFormValidate(prevValidate => {
-        return !someError;})
+      setFormValidate((prevValidate) => {
+        return !someError;
+      });
     }
-  }, [fieldErrors])
+  }, [fieldErrors]);
 
   // Reset form after sucessfully created new breed
   useEffect(() => {
@@ -116,7 +110,7 @@ const NewBreed = ({ history }) => {
   const createBreed = () => dispatch(createBreedAction(newBreedObj));
 
   const onTemperamentSelected = (e) => {
-    console.log('OnChange called in select temp');
+    console.log("OnChange called in select temp");
     setFieldErrors((prevErr) => {
       return {
         ...prevErr,
@@ -520,7 +514,7 @@ const NewBreed = ({ history }) => {
                       value={""}
                       onChange={onTemperamentSelected}
                       onBlur={(e) => {
-                        console.log('onblur in select called');
+                        console.log("onblur in select called");
                         setFieldErrors((prevErr) => {
                           return {
                             ...prevErr,

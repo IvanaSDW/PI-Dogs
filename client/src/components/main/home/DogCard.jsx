@@ -4,31 +4,33 @@ import { useHistory } from "react-router-dom";
 
 const DogCard = (props) => {
 
+  const { breed } = props;
+
   const navigate = useHistory();
 
-  const onShowDetail = () => {
-    navigate.push("/home/breeds/breedId");
+  const onShowDetail = (id) => {
+    navigate.push(`/home/breeds/${id}`);
   };
 
   return (
     <div className="dog-card">
       <img
         className="dog-image"
-        src="https://placedog.net/300/340?r"
+        src={breed.image_url}
         alt="breed"
       />
-      <h4 className="breed-name">Breed Name</h4>
+      <h4 className="breed-name">{breed.name}</h4>
       <div className="breed-temperament">
-        <p>Outgoing, Friendly, Alert, Confident, Intelligent, Courageous</p>
+        <p>{breed.temperaments.join(', ')}</p>
       </div>
       <div className="caption-line">
-        <p className="weight">8-28 kgs</p>
+        <p className="weight">{`${breed.min_weight}-${breed.max_weight} kgs`}</p>
         <button className="breed-detail-button">
           <img
             className="arrow"
             src={rightArrow}
             alt="arrow"
-            onClick={() => onShowDetail()}
+            onClick={() => onShowDetail(breed.id)}
           />
         </button>
       </div>

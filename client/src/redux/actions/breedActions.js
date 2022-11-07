@@ -5,7 +5,8 @@ import {
   GET_ALL_BREEDS_SUCCESS,
   GET_ALL_BREEDS_ERROR,
   GET_BREEDS_BY_NAME,
-  GET_BREED_BY_ID,
+  GET_BREED_BY_ID_SUCCESS,
+  GET_BREED_BY_ID_ERROR,
 } from "../types";
 import axiosClient from "../../config/axios.js";
 
@@ -43,6 +44,26 @@ export const getAllBreedsAction = () => {
     } catch (error) {
       dispatch({
         type: GET_ALL_BREEDS_ERROR,
+        payload: { message: error.message, name: error.name, code: error.code },
+      });
+    }
+  };
+};
+
+export const getBreedByIdAction = (breedId) => {
+  return async (dispatch) => {
+    dispatch({
+      type: LOADING_DB_BREEDS,
+    });
+    try {
+      const response = await axiosClient.get(`/dogs/${breedId}`);
+      dispatch({
+        type: GET_BREED_BY_ID_SUCCESS,
+        payload: response.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_BREED_BY_ID_ERROR,
         payload: { message: error.message, name: error.name, code: error.code },
       });
     }
