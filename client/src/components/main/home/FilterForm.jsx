@@ -3,13 +3,14 @@ import rightArrow from "../../../assets/right-arrow.png";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { applyUserFiltersAction } from "../../../redux/actions/breedActions";
+import {
+  applyUserFiltersAction,
+  getAllBreedsAction,
+} from "../../../redux/actions/breedActions";
 
-const FilterForm = (props) => {
+const FilterForm = () => {
   const navigate = useHistory();
   const dispatch = useDispatch();
-
-  const { onResetSearch } = props;
 
   // GLobal states
   const temperaments = useSelector((state) => state.temps.temperaments);
@@ -21,8 +22,12 @@ const FilterForm = (props) => {
     sourceApi: false,
     sourceLocal: false,
     filterTemp: "0",
-    sortByName: false,
-    sortByWeight: false,
+    sortByName: false, //Filterstate
+    sortByNameAsc: false, //Checkmarks states
+    sortByNameDesc: false,
+    sortByWeight: false, //Filter state
+    sortByWeightAsc: false, // Checkmark states
+    sortByWeightDesc: false,
   });
 
   useEffect(() => {
@@ -35,7 +40,12 @@ const FilterForm = (props) => {
 
   useEffect(() => {
     dispatch(applyUserFiltersAction(filters));
-  }, [filters.source, filters.filterTemp, filters.sortByName, filters.sortByWeight]);
+  }, [
+    filters.source,
+    filters.filterTemp,
+    filters.sortByName,
+    filters.sortByWeight,
+  ]);
 
   const onCreateBreedClicked = () => {
     navigate.push("/home/newBreed");
@@ -77,34 +87,56 @@ const FilterForm = (props) => {
     }
   };
 
-  const onSortByName = (e) => {
+  const onSortByName = (e, order) => {
     if (e.target.checked) {
-
-      setFilters({
-        ...filters,
-        sortByName: "ASC",
-      });
+      if (order === "ASC") {
+        setFilters({
+          ...filters,
+          sortByName: "ASC",
+          sortByNameAsc: true,
+          sortByNameDesc: false,
+        });
+      } else {
+        setFilters({
+          ...filters,
+          sortByName: "DESC",
+          sortByNameAsc: false,
+          sortByNameDesc: true,
+        });
+      }
     } else {
-
       setFilters({
         ...filters,
         sortByName: false,
+        sortByNameAsc: false,
+        sortByNameDesc: false,
       });
     }
   };
 
-  const onSortByWeight = (e) => {
+  const onSortByWeight = (e, order) => {
     if (e.target.checked) {
-
-      setFilters({
-        ...filters,
-        sortByWeight: "ASC",
-      });
+      if (order === "ASC") {
+        setFilters({
+          ...filters,
+          sortByWeight: "ASC",
+          sortByWeightAsc: true,
+          sortByWeightDesc: false,
+        });
+      } else {
+        setFilters({
+          ...filters,
+          sortByWeight: "DESC",
+          sortByWeightAsc: false,
+          sortByWeightDesc: true,
+        });
+      }
     } else {
-
       setFilters({
         ...filters,
         sortByWeight: false,
+        sortByWeightAsc: false,
+        sortByWeightDesc: false,
       });
     }
   };
@@ -128,7 +160,7 @@ const FilterForm = (props) => {
         order: "ASC",
       },
     });
-    onResetSearch(true);
+    dispatch(getAllBreedsAction());
   };
 
   return (
@@ -194,20 +226,38 @@ const FilterForm = (props) => {
           SORT BY
         </h4>
         <label className="check-item">
-          Breed name
+          Breed name ASC
           <input
             type="checkbox"
-            onChange={onSortByName}
-            checked={filters.sortByName}
+            onChange={(e) => onSortByName(e, "ASC")}
+            checked={filters.sortByNameAsc}
           />
           <span className="checkmark"></span>
         </label>
         <label className="check-item">
-          Average weight
+          Breed name DESC
           <input
             type="checkbox"
-            onChange={onSortByWeight}
-            checked={filters.sortByWeight}
+            onChange={(e) => onSortByName(e, "DESC")}
+            checked={filters.sortByNameDesc}
+          />
+          <span className="checkmark"></span>
+        </label>
+        <label className="check-item">
+          Average weight ASC
+          <input
+            type="checkbox"
+            onChange={(e) => onSortByWeight(e, "ASC")}
+            checked={filters.sortByWeightAsc}
+          />
+          <span className="checkmark"></span>
+        </label>
+        <label className="check-item">
+          Average weight DESC
+          <input
+            type="checkbox"
+            onChange={(e) => onSortByWeight(e, "DESC")}
+            checked={filters.sortByWeightDesc}
           />
           <span className="checkmark"></span>
         </label>

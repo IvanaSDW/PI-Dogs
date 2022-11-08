@@ -68,7 +68,11 @@ const FabAddTemp = ({ onAdd }) => {
             value={newTemp}
             onChange={takeInput}
           />
-          <button className="submit-temp" onClick={() => handleSubmit(newTemp)}>
+          <button
+            className="submit-temp"
+            onClick={() => handleSubmit(newTemp)}
+            type="button"
+          >
             ADD
           </button>
         </div>

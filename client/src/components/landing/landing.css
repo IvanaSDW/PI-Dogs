@@ -1,0 +1,199 @@
+.main-wrapper {
+  position: absolute;
+  width: 1440px;
+  height: 866px;
+  left: 0px;
+  top: 0px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.landing-header {
+  position: absolute;
+  width: 1440px;
+  height: 72px;
+  left: 0px;
+  top: 0px;
+}
+
+.header-left-items {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 32px;
+  position: absolute;
+  width: 281px;
+  height: 20px;
+  left: 165px;
+  top: calc(50% - 20px / 2);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+
+  font-feature-settings: "salt" on, "liga" off;
+  color: #18191f;
+}
+
+.landing-header-logo {
+    position: absolute;
+    width: 170px;
+    height: 32px;
+    top: calc(50% - 32px / 2);
+    left: calc(50% - 170px / 2);
+    background-image: url('../../assets/logo.png');
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+.header-social-links {
+  position: absolute;
+  width: 170px;
+  height: 32px;
+  right: 165px;
+  top: calc(50% - 32px / 2);
+  background-image: url('../../assets/social_links_footer.png');
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+
+.purple-circle {
+  position: absolute;
+  width: 740px;
+  height: 740px;
+  left: 830px;
+  top: -160px;
+  border-radius: 50%;
+  background: #8c30f5;
+  opacity: 0.5;
+}
+
+.turquoise-circle {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  left: 1042px;
+  top: 589px;
+  background: #75e3ea;
+  border-radius: 50%;
+}
+
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 32px;
+  position: absolute;
+  width: 540px;
+  height: 388px;
+  left: 165px;
+  top: calc(45% - 388px / 2);
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 16px;
+  width: 540px;
+  height: 308px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.hero-title {
+  width: 540px;
+  height: 196px;
+
+  /* Heading/H1 */
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 72px;
+  line-height: 98px;
+
+  color: #18191f;
+}
+
+.hero-subtitle {
+  width: 540px;
+  height: 96px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 32px;
+  color: #18191f;
+}
+
+.praga-image {
+  position: absolute;
+  left: 52.02%;
+  right: 11.97%;
+  top: 19%;
+  height: 44.71;
+  bottom: 35%;
+  background-image: url("../../assets/praga-landing-image.jpeg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* Header Image Shadow */
+  box-shadow: 48px 24px 48px rgba(24, 37, 56, 0.12);
+  border-radius: 8px;
+  transform: rotate(-7deg);
+}
+
+.praga-badge {
+  position: absolute;
+  width: 135px;
+  height: fit-content;
+  left: 793px;
+  top: 525px;
+  background-color: black;
+  color: #fff;
+  display: block;
+  justify-content: space-evenly;
+  justify-items: center;
+  align-items: center;
+  align-content: space-around;
+  text-align: center;
+  transform: rotate(-7deg);
+  border-radius: 6px;
+}
+
+.praga-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.praga-subtitle {
+  font-family: "Nanum Pen";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.enter-site-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    color: #f1e4ff;
+    background: #8c30f5;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.8em;
+    font-weight: 500;
+  }
+
+  .enter-site-button:hover {
+    cursor: pointer;
+  }

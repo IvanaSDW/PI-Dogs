@@ -9,9 +9,7 @@ const GoHomeBtn = () => {
 
   return (
     <div>
-      <button onClick={navigateHome}>
-        Let's Go
-      </button>
+      <button type='button' className="enter-site-button" onClick={navigateHome}>Enter site</button>
     </div>
   );
 };

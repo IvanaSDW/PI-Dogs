@@ -11,21 +11,12 @@ const Home = () => {
 
   const dispatch = useDispatch();
   //globalState
-  const { breedsToRender, breedDbError, breedDbloading } = useSelector(
+  const { shallResetSearch, breedDbError, breedDbloading } = useSelector(
     (state) => state.breeds
   );
-
-  // local state
-  const [shallResetSearch, setShallResetSearch] = useState(false);
-
-  const onResetSearch = (val) => {
-    console.log('time to reset search: ', val)
-      setShallResetSearch(val)
-  }
   
   useEffect(() => {
     if (shallResetSearch) {
-      setShallResetSearch(false);
       dispatch(getAllBreedsAction());
     }
   }, [shallResetSearch])
@@ -45,10 +36,10 @@ const Home = () => {
         </div>
       </div>
       <div className="filter">
-        <FilterForm onResetSearch={onResetSearch}/>
+        <FilterForm />
       </div>
       <div className="gallery">
-        <DogGrid breedsToRender={breedsToRender} />
+        <DogGrid />
       </div>
       <div className="footer">
         <Footer />

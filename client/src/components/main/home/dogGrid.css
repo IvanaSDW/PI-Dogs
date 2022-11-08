@@ -26,3 +26,31 @@
   line-height: 32px;
   color: #000000;
 }
+
+.hidden {
+  visibility: hidden;
+}
+
+.pageNum {
+  cursor: pointer;
+  width: 20px;
+  text-align: center;
+}
+
+.current {
+  color:blueviolet;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.prev-next-button {
+  cursor: pointer;
+  width: fit-content;
+  text-align: center;
+}
+
+.first-last-button {
+  cursor: pointer;
+  width: fit-content;
+  text-align: center;
+}

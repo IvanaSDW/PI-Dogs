@@ -16,6 +16,7 @@ const initialState = {
   breedsToRender: [],
   breedDbError: null,
   breedDbloading: false,
+  shallResetSearch: false,
 };
 
 const breedsReducer = (state = initialState, action) => {
@@ -31,24 +32,20 @@ const breedsReducer = (state = initialState, action) => {
         ...state,
         breedDbloading: false,
         breedDbError: false,
+        shallResetSearch: true,
       };
 
     case CREATE_BREED_DB_ERROR:
     case GET_ALL_BREEDS_ERROR:
+    case GET_BREEDS_BY_NAME_ERROR:
       return {
         ...state,
         breedDbloading: false,
         breedDbError: action.payload,
+        shallResetSearch: false,
       };
 
     case GET_ALL_BREEDS_SUCCESS:
-      return {
-        ...state,
-        breedDbloading: false,
-        breedDbError: false,
-        breeds: action.payload,
-        breedsToRender: action.payload,
-      };
     case GET_BREEDS_BY_NAME_SUCCESS:
       return {
         ...state,
@@ -56,55 +53,51 @@ const breedsReducer = (state = initialState, action) => {
         breedDbError: false,
         breeds: action.payload,
         breedsToRender: action.payload,
-      };
-    case GET_BREEDS_BY_NAME_ERROR:
-      return {
-        ...state,
-        breedDbloading: false,
-        breedDbError: action.payload,
+        shallResetSearch: false,
       };
 
-    case FILTER_BY_SOURCE:
-      const filterBy = action.payload;
-      switch (filterBy) {
-        case "all":
-          return {
-            ...state,
-            breedsToRender: state.breeds,
-          };
-        case "local":
-          const locals = state.breeds.filter((breed) => breed.is_local);
-          return {
-            ...state,
-            breedsToRender: locals,
-          };
-        case "api":
-          const fromApi = state.breeds.filter((breed) => !breed.is_local);
-          return {
-            ...state,
-            breedsToRender: fromApi,
-          };
-        default:
-          return state;
-      }
+    // case FILTER_BY_SOURCE:
+    //   const filterBy = action.payload;
+    //   switch (filterBy) {
+    //     case "all":
+    //       return {
+    //         ...state,
+    //         breedsToRender: state.breeds,
+    //       };
+    //     case "local":
+    //       const locals = state.breeds.filter((breed) => breed.is_local);
+    //       return {
+    //         ...state,
+    //         breedsToRender: locals,
+    //       };
+    //     case "api":
+    //       const fromApi = state.breeds.filter((breed) => !breed.is_local);
+    //       return {
+    //         ...state,
+    //         breedsToRender: fromApi,
+    //       };
+    //     default:
+    //       return state;
+    //   }
 
-    case FILTER_BY_TEMP:
-      if (action.payload === "0") {
-        return {
-          ...state,
-          breedsToRender: state.breeds,
-        };
-      } else {
-        const byTemp = state.breeds.filter((breed) =>
-          breed.temperaments.includes(action.payload)
-        );
-        return {
-          ...state,
-          breedsToRender: byTemp,
-        };
-      }
+    // case FILTER_BY_TEMP:
+    //   if (action.payload === "0") {
+    //     return {
+    //       ...state,
+    //       breedsToRender: state.breeds,
+    //     };
+    //   } else {
+    //     const byTemp = state.breeds.filter((breed) =>
+    //       breed.temperaments.includes(action.payload)
+    //     );
+    //     return {
+    //       ...state,
+    //       breedsToRender: byTemp,
+    //     };
+    //   }
 
     case APPLY_USER_FILTERS: {
+      console.log('apply filters called with filters: ', action.payload)
       const { source, filterTemp, sortByName, sortByWeight } = action.payload;
       let filtered = [];
       switch (source) {
@@ -118,8 +111,7 @@ const breedsReducer = (state = initialState, action) => {
           filtered = state.breeds.filter((breed) => !breed.is_local);
           break;
         default:
-          filtered = state.breeds;
-          return;
+          break;
       }
 
       if (filterTemp !== "0") {
@@ -135,6 +127,15 @@ const breedsReducer = (state = initialState, action) => {
           return 0;
         });
       }
+
+      if (sortByName === "DESC") {
+        filtered = filtered.sort((a, b) => {
+          if (a.name.toUpperCase() > b.name.toUpperCase()) return -1;
+          if (b.name.toUpperCase() > a.name.toUpperCase()) return 1;
+          return 0;
+        });
+      }
+
 
       if (sortByWeight === "ASC") {
         filtered = filtered.sort((a, b) => {
@@ -152,6 +153,22 @@ const breedsReducer = (state = initialState, action) => {
         });
       }
 
+      if (sortByWeight === "DESC") {
+        filtered = filtered.sort((a, b) => {
+          if (
+            (a.min_weight + a.max_weight) / 2 >
+            (b.min_weight + b.max_weight) / 2
+          )
+            return -1;
+          if (
+            (b.min_weight + b.max_weight) / 2 >
+            (a.min_weight + a.max_weight) / 2
+          )
+            return 1;
+          return 0;
+        });
+      }
+
       if (!sortByName && !sortByWeight) {
         filtered = filtered.sort((a, b) => {
           if (a.id > b.id) return 1;
@@ -162,7 +179,7 @@ const breedsReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        breedsToRender: filtered,
+        breedsToRender: filtered.map(e => e),
       };
     }
     default:
