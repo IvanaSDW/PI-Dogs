@@ -8,6 +8,13 @@ import {
   GET_BREED_BY_ID_ERROR,
   GET_BREEDS_BY_NAME_ERROR,
   GET_BREEDS_BY_NAME_SUCCESS,
+  FILTER_BY_SOURCE,
+  FILTER_BY_TEMP,
+  SORT_BY_NAME_ASC,
+  SORT_BY_NAME_DESC,
+  SORT_BY_WEIGHT_ASC,
+  SORT_BY_WEIGHT_DESC,
+  APPLY_USER_FILTERS,
 } from "../types";
 import axiosClient from "../../config/axios.js";
 
@@ -74,19 +81,45 @@ export const getBreedByIdAction = (breedId) => {
 export const getBreedsByNameAction = (name) => {
   return async (dispatch) => {
     dispatch({
-      type: LOADING_DB_BREEDS
-    })
+      type: LOADING_DB_BREEDS,
+    });
     try {
-      const response = await axiosClient.get('/dogs', {params: {name: name}});
+      const response = await axiosClient.get("/dogs", {
+        params: { name: name },
+      });
       dispatch({
         type: GET_BREEDS_BY_NAME_SUCCESS,
         payload: response.data,
-      })
+      });
     } catch (error) {
       dispatch({
         type: GET_BREEDS_BY_NAME_ERROR,
         payload: { message: error.message, name: error.name, code: error.code },
-      })
+      });
     }
+  };
+};
+
+export const filterBreedsBySource = (source) => {
+  return (dispatch) => {
+    dispatch({ type: FILTER_BY_SOURCE, payload: source });
+  };
+};
+
+export const filterByTemperamentAction = (temperament) => {
+  return (dispatch) => {
+    dispatch({
+      type: FILTER_BY_TEMP,
+      payload: temperament,
+    })
+  } 
+}
+
+export const applyUserFiltersAction = (filters) => {
+  return (dispatch) => {
+    dispatch({
+      type: APPLY_USER_FILTERS,
+      payload: filters,
+    })
   }
 }

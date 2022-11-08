@@ -1,17 +1,21 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DogCard from "../home/DogCard.jsx";
 import "./dogGrid.css";
 
-const DogGrid = () => {
+const DogGrid = (props) => {
+  //Global State
   const { breeds, breedDbError, breedDbloading } = useSelector(
     (state) => state.breeds
   );
 
+  const { breedsToRender } = props;
+
   return (
     <>
       <div className="gridContainer">
-        {breeds.map((breed) => {
-          return <DogCard key={breed.id} breed={breed}/>;
+        {breedsToRender.map((breed) => {
+          return <DogCard key={breed.id} breed={breed} />;
         })}
       </div>
       <div className="pagination-divider"></div>

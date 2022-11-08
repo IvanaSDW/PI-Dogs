@@ -3,8 +3,33 @@ import DogGrid from "./DogGrid";
 import "./home.css";
 import FilterForm from "./FilterForm";
 import Footer from "../../footer/Footer.jsx";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBreedsAction } from "../../../redux/actions/breedActions.js";
 
 const Home = () => {
+
+  const dispatch = useDispatch();
+  //globalState
+  const { breedsToRender, breedDbError, breedDbloading } = useSelector(
+    (state) => state.breeds
+  );
+
+  // local state
+  const [shallResetSearch, setShallResetSearch] = useState(false);
+
+  const onResetSearch = (val) => {
+    console.log('time to reset search: ', val)
+      setShallResetSearch(val)
+  }
+  
+  useEffect(() => {
+    if (shallResetSearch) {
+      setShallResetSearch(false);
+      dispatch(getAllBreedsAction());
+    }
+  }, [shallResetSearch])
+
 
   return (
     <div className="mainContainer">
@@ -20,10 +45,10 @@ const Home = () => {
         </div>
       </div>
       <div className="filter">
-        <FilterForm />
+        <FilterForm onResetSearch={onResetSearch}/>
       </div>
       <div className="gallery">
-        <DogGrid />
+        <DogGrid breedsToRender={breedsToRender} />
       </div>
       <div className="footer">
         <Footer />

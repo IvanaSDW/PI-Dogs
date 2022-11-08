@@ -7,7 +7,7 @@ const SearchBar = () => {
   const dispatch = useDispatch();
 
   //global state
-  const { breedDbError } = useSelector((state) => state.breeds);
+  const { breedsToRender, breedDbError } = useSelector((state) => state.breeds);
 
   // Local state
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +16,10 @@ const SearchBar = () => {
   const searchByName = (name) => {
     dispatch(getBreedsByNameAction(name));
   };
+
+  useEffect(() => {
+    setSearchTerm('')
+  }, [breedsToRender])
 
   useEffect(() => {
     setInputError((prevError) => {

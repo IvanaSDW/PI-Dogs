@@ -2,25 +2,148 @@ import "./filterForm.css";
 import rightArrow from "../../../assets/right-arrow.png";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { applyUserFiltersAction } from "../../../redux/actions/breedActions";
 
-
-const FilterForm = () => {
+const FilterForm = (props) => {
   const navigate = useHistory();
+  const dispatch = useDispatch();
 
+  const { onResetSearch } = props;
+
+  // GLobal states
   const temperaments = useSelector((state) => state.temps.temperaments);
+  const { breeds, breedsToRender } = useSelector((state) => state.breeds);
+
+  //Local states
+  const [filters, setFilters] = useState({
+    source: "all",
+    sourceApi: false,
+    sourceLocal: false,
+    filterTemp: "0",
+    sortByName: false,
+    sortByWeight: false,
+  });
+
+  useEffect(() => {
+    if (filters.filterTemp !== "0")
+      setFilters({
+        ...filters,
+        filterTemp: "0",
+      });
+  }, [breeds]);
+
+  useEffect(() => {
+    dispatch(applyUserFiltersAction(filters));
+  }, [filters.source, filters.filterTemp, filters.sortByName, filters.sortByWeight]);
 
   const onCreateBreedClicked = () => {
     navigate.push("/home/newBreed");
   };
 
+  const onUserCreatedChecked = (e) => {
+    if (e.target.checked) {
+      setFilters({
+        ...filters,
+        source: "local",
+        sourceLocal: true,
+        sourceApi: false,
+      });
+    } else {
+      setFilters({
+        ...filters,
+        source: "all",
+        sourceLocal: false,
+        sourceApi: false,
+      });
+    }
+  };
+
+  const onApiChecked = (e) => {
+    if (e.target.checked) {
+      setFilters({
+        ...filters,
+        source: "api",
+        sourceLocal: false,
+        sourceApi: true,
+      });
+    } else {
+      setFilters({
+        ...filters,
+        source: "all",
+        sourceLocal: false,
+        sourceApi: false,
+      });
+    }
+  };
+
+  const onSortByName = (e) => {
+    if (e.target.checked) {
+
+      setFilters({
+        ...filters,
+        sortByName: "ASC",
+      });
+    } else {
+
+      setFilters({
+        ...filters,
+        sortByName: false,
+      });
+    }
+  };
+
+  const onSortByWeight = (e) => {
+    if (e.target.checked) {
+
+      setFilters({
+        ...filters,
+        sortByWeight: "ASC",
+      });
+    } else {
+
+      setFilters({
+        ...filters,
+        sortByWeight: false,
+      });
+    }
+  };
+
+  const onFilterTempSelected = (e) => {
+    setFilters({
+      ...filters,
+      filterTemp: e.target.value,
+    });
+  };
+
+  const onClearFilters = () => {
+    console.log("clearing filters");
+    setFilters({
+      source: "all",
+      sourceApi: false,
+      sourceLocal: false,
+      filterTemp: "0",
+      sort: {
+        orderBy: "name",
+        order: "ASC",
+      },
+    });
+    onResetSearch(true);
+  };
 
   return (
     <div>
       <form className="filter-form">
         <h3 className="form-title">Filters</h3>
         <div className="results-line">
-          <p className="results">129 results</p>
-          <button className="clear-button">Clear all</button>
+          <p className="results">{`${breedsToRender.length} results`}</p>
+          <button
+            className="clear-button"
+            type="button"
+            onClick={onClearFilters}
+          >
+            Clear all
+          </button>
         </div>
         <div className="form-divider"></div>
         <h4 htmlFor="input-temperament" className="form-label">
@@ -30,10 +153,18 @@ const FilterForm = () => {
           name="temperament"
           id="input-temperament"
           className="temperament-select"
+          value={filters.filterTemp}
+          onChange={onFilterTempSelected}
         >
-          <option key='0' value={0}>Select temperament</option>
+          <option key="0" value={"0"}>
+            Select temperament
+          </option>
           {temperaments.map((temp) => {
-            return <option key={temp.id} value={temp.id}>{temp.name}</option>;
+            return (
+              <option key={temp.id} value={temp.name}>
+                {temp.name}
+              </option>
+            );
           })}
         </select>
         <div className="form-divider"></div>
@@ -42,12 +173,42 @@ const FilterForm = () => {
         </h4>
         <label className="check-item">
           Breed database
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            onChange={onApiChecked}
+            checked={filters.sourceApi}
+          />
           <span className="checkmark"></span>
         </label>
         <label className="check-item">
           User created
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            onChange={onUserCreatedChecked}
+            checked={filters.sourceLocal}
+          />
+          <span className="checkmark"></span>
+        </label>
+        <div className="form-divider"></div>
+        <h4 htmlFor="input-source" className="form-label">
+          SORT BY
+        </h4>
+        <label className="check-item">
+          Breed name
+          <input
+            type="checkbox"
+            onChange={onSortByName}
+            checked={filters.sortByName}
+          />
+          <span className="checkmark"></span>
+        </label>
+        <label className="check-item">
+          Average weight
+          <input
+            type="checkbox"
+            onChange={onSortByWeight}
+            checked={filters.sortByWeight}
+          />
           <span className="checkmark"></span>
         </label>
       </form>
