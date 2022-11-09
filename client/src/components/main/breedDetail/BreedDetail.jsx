@@ -6,9 +6,15 @@ import fav_off from "../../../assets/favorite_off.png";
 import NavBar from "../../header/NavBar.jsx";
 import Footer from "../../footer/Footer";
 import { useBreed } from "./useBreedHook";
+import { useSelector } from "react-redux";
 
 const BreedDetail = (props) => {
+
+  //Received by props
   const { breedId } = props.match.params;
+
+  //Global state
+  const { breedDbloading, breedDbError } = useSelector(state => state.breeds)
 
   const currentBreed = useBreed(breedId);
 

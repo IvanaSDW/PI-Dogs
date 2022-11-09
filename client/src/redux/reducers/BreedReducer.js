@@ -1,3 +1,4 @@
+import { applyFilters } from "../../utils/logic";
 import {
   LOADING_DB_BREEDS,
   CREATE_BREED_DB_ERROR,
@@ -13,10 +14,12 @@ import {
   RESET_USER_FILTERS,
   UPDATE_USER_FILTERS,
   UPDATE_CURRENT_PAGE,
+  SET_OPENED_DETAIL_TRUE,
 } from "../types";
 
 const initialState = {
   breeds: [],
+  breedsSearched: [],
   breedsToRender: [],
   breedDbError: null,
   breedDbloading: false,
@@ -28,6 +31,7 @@ const initialState = {
     sortByWeight: false,
   },
   currentPage: 1,
+  openedDetail: false,
 };
 
 const breedsReducer = (state = initialState, action) => {
@@ -64,14 +68,27 @@ const breedsReducer = (state = initialState, action) => {
       };
 
     case GET_ALL_BREEDS_SUCCESS:
-    case GET_BREEDS_BY_NAME_SUCCESS:
+      console.log("Reducer case GET_ALL_BREEDS_SUCCESS called");
       return {
         ...state,
         breedDbloading: false,
         breedDbError: false,
         breeds: action.payload,
+        breedsSearched: action.payload,
         breedsToRender: action.payload,
         shallResetSearch: false,
+        currentPage: 1,
+      };
+    case GET_BREEDS_BY_NAME_SUCCESS:
+      console.log("Reducer case GET_BREEDS_BY_NAME called");
+      return {
+        ...state,
+        breedDbloading: false,
+        breedDbError: false,
+        breedsSearched: action.payload,
+        breedsToRender: applyFilters(action.payload, state.userFilters),
+        shallResetSearch: false,
+        currentPage: 1,
       };
 
     case GET_BREED_BY_ID_SUCCESS:
@@ -82,89 +99,13 @@ const breedsReducer = (state = initialState, action) => {
       };
 
     case APPLY_USER_FILTERS: {
-      console.log("apply filters called with filters: ", action.payload);
-      const { source, filterTemp, sortByName, sortByWeight } =
-        state.userFilters;
-      let filtered = [];
-      switch (source) {
-        case "all":
-          filtered = state.breeds;
-          break;
-        case "local":
-          filtered = state.breeds.filter((breed) => breed.is_local);
-          break;
-        case "api":
-          filtered = state.breeds.filter((breed) => !breed.is_local);
-          break;
-        default:
-          break;
-      }
 
-      if (filterTemp !== "0") {
-        filtered = filtered.filter((breed) =>
-          breed.temperaments.includes(filterTemp)
-        );
-      }
-
-      if (sortByName === "ASC") {
-        filtered = filtered.sort((a, b) => {
-          if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
-          if (b.name.toUpperCase() > a.name.toUpperCase()) return -1;
-          return 0;
-        });
-      }
-
-      if (sortByName === "DESC") {
-        filtered = filtered.sort((a, b) => {
-          if (a.name.toUpperCase() > b.name.toUpperCase()) return -1;
-          if (b.name.toUpperCase() > a.name.toUpperCase()) return 1;
-          return 0;
-        });
-      }
-
-      if (sortByWeight === "ASC") {
-        filtered = filtered.sort((a, b) => {
-          if (
-            (a.min_weight + a.max_weight) / 2 >
-            (b.min_weight + b.max_weight) / 2
-          )
-            return 1;
-          if (
-            (b.min_weight + b.max_weight) / 2 >
-            (a.min_weight + a.max_weight) / 2
-          )
-            return -1;
-          return 0;
-        });
-      }
-
-      if (sortByWeight === "DESC") {
-        filtered = filtered.sort((a, b) => {
-          if (
-            (a.min_weight + a.max_weight) / 2 >
-            (b.min_weight + b.max_weight) / 2
-          )
-            return -1;
-          if (
-            (b.min_weight + b.max_weight) / 2 >
-            (a.min_weight + a.max_weight) / 2
-          )
-            return 1;
-          return 0;
-        });
-      }
-
-      if (!sortByName && !sortByWeight) {
-        filtered = filtered.sort((a, b) => {
-          if (a.id > b.id) return 1;
-          if (b.id > a.id) return -1;
-          return 0;
-        });
-      }
-
+      const newCurrentPage = state.openedDetail ? state.currentPage : 1;
       return {
         ...state,
-        breedsToRender: filtered.map((e) => e),
+        breedsToRender: applyFilters(state.breedsSearched, state.userFilters),
+        currentPage: newCurrentPage,
+        openedDetail: false
       };
     }
 
@@ -192,6 +133,12 @@ const breedsReducer = (state = initialState, action) => {
       return {
         ...state,
         currentPage: action.payload,
+      };
+
+    case SET_OPENED_DETAIL_TRUE:
+      return {
+        ...state,
+        openedDetail: true,
       };
 
     default:

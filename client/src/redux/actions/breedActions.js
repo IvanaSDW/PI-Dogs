@@ -16,7 +16,7 @@ import {
   SORT_BY_WEIGHT_DESC,
   APPLY_USER_FILTERS,
 } from "../types";
-import axiosClient from "../../config/axios.js";
+import axiosClient from "../../utils/axios.js";
 
 export const createBreedAction = (newBreedObj) => {
   return async (dispatch) => {

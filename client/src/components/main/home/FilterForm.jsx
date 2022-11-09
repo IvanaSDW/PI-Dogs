@@ -7,7 +7,11 @@ import {
   applyUserFiltersAction,
   getAllBreedsAction,
 } from "../../../redux/actions/breedActions";
-import { RESET_USER_FILTERS, UPDATE_USER_FILTERS } from "../../../redux/types";
+import {
+  RESET_USER_FILTERS,
+  UPDATE_CURRENT_PAGE,
+  UPDATE_USER_FILTERS,
+} from "../../../redux/types";
 
 const FilterForm = () => {
   const navigate = useHistory();
@@ -21,19 +25,23 @@ const FilterForm = () => {
 
   //Local states
   const [filterControls, setFilterControls] = useState({
-    sourceApi: userFilters.source === 'api' ? true : false,
-    sourceLocal: userFilters.source === 'local' ? true : false,
+    sourceApi: userFilters.source === "api" ? true : false,
+    sourceLocal: userFilters.source === "local" ? true : false,
     filterTemp: userFilters.filterTemp,
-    sortByNameAsc: userFilters.sortByName === 'ASC' ? true : false,
-    sortByNameDesc: userFilters.sortByName === 'DESC' ? true : false,
-    sortByWeightAsc: userFilters.sortByWeight === 'ASC' ? true : false,
-    sortByWeightDesc: userFilters.sortByWeight === 'DESC' ? true : false,
+    sortByNameAsc: userFilters.sortByName === "ASC" ? true : false,
+    sortByNameDesc: userFilters.sortByName === "DESC" ? true : false,
+    sortByWeightAsc: userFilters.sortByWeight === "ASC" ? true : false,
+    sortByWeightDesc: userFilters.sortByWeight === "DESC" ? true : false,
   });
 
   useEffect(() => {
-    console.log("filters changed...");
+    console.log("filterControls changed...");
+    // dispatch({
+    //   type: UPDATE_CURRENT_PAGE,
+    //   payload: 1,
+    // });
     dispatch(applyUserFiltersAction());
-  }, [userFilters]);
+  }, [filterControls]);
 
   const onCreateBreedClicked = () => {
     navigate.push("/home/newBreed");
@@ -195,7 +203,7 @@ const FilterForm = () => {
   };
 
   const onClearFilters = () => {
-    console.log('Clear filters called');
+    console.log("Clear filters called");
     dispatch({
       type: RESET_USER_FILTERS,
     });

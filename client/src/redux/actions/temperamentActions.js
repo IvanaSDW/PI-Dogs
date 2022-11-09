@@ -1,4 +1,4 @@
-import axiosClient from "../../config/axios";
+import axiosClient from "../../utils/axios.js";
 import {
   CREATE_TEMP_DB_ERROR,
   CREATE_TEMP_DB_SUCCESS,

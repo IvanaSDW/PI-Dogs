@@ -1,13 +1,19 @@
 import "./dogCard.css";
 import rightArrow from "../../../assets/right-arrow.png";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { SET_OPENED_DETAIL_TRUE } from "../../../redux/types";
 
 const DogCard = (props) => {
   const { breed } = props;
 
   const navigate = useHistory();
+  const dispatch = useDispatch();
 
   const onShowDetail = () => {
+    dispatch({
+      type: SET_OPENED_DETAIL_TRUE,
+    })
     navigate.push(`/home/breeds/${breed.id}`);
   };
 
