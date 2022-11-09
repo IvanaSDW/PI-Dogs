@@ -7,6 +7,7 @@ import {
   applyUserFiltersAction,
   getAllBreedsAction,
 } from "../../../redux/actions/breedActions";
+import { RESET_USER_FILTERS, UPDATE_USER_FILTERS } from "../../../redux/types";
 
 const FilterForm = () => {
   const navigate = useHistory();
@@ -14,75 +15,82 @@ const FilterForm = () => {
 
   // GLobal states
   const temperaments = useSelector((state) => state.temps.temperaments);
-  const { breeds, breedsToRender } = useSelector((state) => state.breeds);
+  const { breeds, breedsToRender, userFilters } = useSelector(
+    (state) => state.breeds
+  );
 
   //Local states
-  console.log('setting default filters at mount..');
-  const [filters, setFilters] = useState({
-    source: "all",
-    sourceApi: false,
-    sourceLocal: false,
-    filterTemp: "0",
-    sortByName: false, //Filterstate
-    sortByNameAsc: false, //Checkmarks states
-    sortByNameDesc: false,
-    sortByWeight: false, //Filter state
-    sortByWeightAsc: false, // Checkmark states
-    sortByWeightDesc: false,
+  const [filterControls, setFilterControls] = useState({
+    sourceApi: userFilters.source === 'api' ? true : false,
+    sourceLocal: userFilters.source === 'local' ? true : false,
+    filterTemp: userFilters.filterTemp,
+    sortByNameAsc: userFilters.sortByName === 'ASC' ? true : false,
+    sortByNameDesc: userFilters.sortByName === 'DESC' ? true : false,
+    sortByWeightAsc: userFilters.sortByWeight === 'ASC' ? true : false,
+    sortByWeightDesc: userFilters.sortByWeight === 'DESC' ? true : false,
   });
 
   useEffect(() => {
-    if (filters.filterTemp !== "0")
-      setFilters({
-        ...filters,
-        filterTemp: "0",
-      });
-  }, [breeds]);
-
-  useEffect(() => {
-    console.log('filters changed...');
-    dispatch(applyUserFiltersAction(filters));
-  }, [
-    filters.source,
-    filters.filterTemp,
-    filters.sortByName,
-    filters.sortByWeight,
-  ]);
+    console.log("filters changed...");
+    dispatch(applyUserFiltersAction());
+  }, [userFilters]);
 
   const onCreateBreedClicked = () => {
     navigate.push("/home/newBreed");
   };
 
-  const onUserCreatedChecked = (e) => {
+  const onToggleOnlyLocals = (e) => {
     if (e.target.checked) {
-      setFilters({
-        ...filters,
-        source: "local",
+      dispatch({
+        type: UPDATE_USER_FILTERS,
+        payload: {
+          source: "local",
+        },
+      });
+
+      setFilterControls({
+        ...filterControls,
         sourceLocal: true,
         sourceApi: false,
       });
     } else {
-      setFilters({
-        ...filters,
-        source: "all",
+      dispatch({
+        type: UPDATE_USER_FILTERS,
+        payload: {
+          source: "all",
+        },
+      });
+      setFilterControls({
+        ...filterControls,
         sourceLocal: false,
         sourceApi: false,
       });
     }
   };
 
-  const onApiChecked = (e) => {
+  const onToggleOnlyApi = (e) => {
     if (e.target.checked) {
-      setFilters({
-        ...filters,
-        source: "api",
+      dispatch({
+        type: UPDATE_USER_FILTERS,
+        payload: {
+          source: "api",
+        },
+      });
+
+      setFilterControls({
+        ...filterControls,
         sourceLocal: false,
         sourceApi: true,
       });
     } else {
-      setFilters({
-        ...filters,
-        source: "all",
+      dispatch({
+        type: UPDATE_USER_FILTERS,
+        payload: {
+          source: "all",
+        },
+      });
+      setFilterControls({
+        ...filterControls,
         sourceLocal: false,
         sourceApi: false,
       });
@@ -92,24 +100,39 @@ const FilterForm = () => {
   const onSortByName = (e, order) => {
     if (e.target.checked) {
       if (order === "ASC") {
-        setFilters({
-          ...filters,
-          sortByName: "ASC",
+        dispatch({
+          type: UPDATE_USER_FILTERS,
+          payload: {
+            sortByName: "ASC",
+          },
+        });
+        setFilterControls({
+          ...filterControls,
           sortByNameAsc: true,
           sortByNameDesc: false,
         });
       } else {
-        setFilters({
-          ...filters,
-          sortByName: "DESC",
+        dispatch({
+          type: UPDATE_USER_FILTERS,
+          payload: {
+            sortByName: "DESC",
+          },
+        });
+        setFilterControls({
+          ...filterControls,
           sortByNameAsc: false,
           sortByNameDesc: true,
         });
       }
     } else {
-      setFilters({
-        ...filters,
-        sortByName: false,
+      dispatch({
+        type: UPDATE_USER_FILTERS,
+        payload: {
+          sortByName: false,
+        },
+      });
+      setFilterControls({
+        ...filterControls,
         sortByNameAsc: false,
         sortByNameDesc: false,
       });
@@ -119,24 +142,39 @@ const FilterForm = () => {
   const onSortByWeight = (e, order) => {
     if (e.target.checked) {
       if (order === "ASC") {
-        setFilters({
-          ...filters,
-          sortByWeight: "ASC",
+        dispatch({
+          type: UPDATE_USER_FILTERS,
+          payload: {
+            sortByWeight: "ASC",
+          },
+        });
+        setFilterControls({
+          ...filterControls,
           sortByWeightAsc: true,
           sortByWeightDesc: false,
         });
       } else {
-        setFilters({
-          ...filters,
-          sortByWeight: "DESC",
+        dispatch({
+          type: UPDATE_USER_FILTERS,
+          payload: {
+            sortByWeight: "DESC",
+          },
+        });
+        setFilterControls({
+          ...filterControls,
           sortByWeightAsc: false,
           sortByWeightDesc: true,
         });
       }
     } else {
-      setFilters({
-        ...filters,
-        sortByWeight: false,
+      dispatch({
+        type: UPDATE_USER_FILTERS,
+        payload: {
+          sortByWeight: false,
+        },
+      });
+      setFilterControls({
+        ...filterControls,
         sortByWeightAsc: false,
         sortByWeightDesc: false,
       });
@@ -144,23 +182,31 @@ const FilterForm = () => {
   };
 
   const onFilterTempSelected = (e) => {
-    setFilters({
-      ...filters,
+    dispatch({
+      type: UPDATE_USER_FILTERS,
+      payload: {
+        filterTemp: e.target.value,
+      },
+    });
+    setFilterControls({
+      ...filterControls,
       filterTemp: e.target.value,
     });
   };
 
   const onClearFilters = () => {
-    console.log("clearing filters");
-    setFilters({
-      source: "all",
+    console.log('Clear filters called');
+    dispatch({
+      type: RESET_USER_FILTERS,
+    });
+    setFilterControls({
       sourceApi: false,
       sourceLocal: false,
       filterTemp: "0",
-      sort: {
-        orderBy: "name",
-        order: "ASC",
-      },
+      sortByNameAsc: false,
+      sortByNameDesc: false,
+      sortByWeightAsc: false,
+      sortByWeightDesc: false,
     });
     dispatch(getAllBreedsAction());
   };
@@ -187,7 +233,7 @@ const FilterForm = () => {
           name="temperament"
           id="input-temperament"
           className="temperament-select"
-          value={filters.filterTemp}
+          value={filterControls.filterTemp}
           onChange={onFilterTempSelected}
         >
           <option key="0" value={"0"}>
@@ -209,8 +255,8 @@ const FilterForm = () => {
           Breed database
           <input
             type="checkbox"
-            onChange={onApiChecked}
-            checked={filters.sourceApi}
+            onChange={onToggleOnlyApi}
+            checked={filterControls.sourceApi}
           />
           <span className="checkmark"></span>
         </label>
@@ -218,8 +264,8 @@ const FilterForm = () => {
           User created
           <input
             type="checkbox"
-            onChange={onUserCreatedChecked}
-            checked={filters.sourceLocal}
+            onChange={onToggleOnlyLocals}
+            checked={filterControls.sourceLocal}
           />
           <span className="checkmark"></span>
         </label>
@@ -232,7 +278,7 @@ const FilterForm = () => {
           <input
             type="checkbox"
             onChange={(e) => onSortByName(e, "ASC")}
-            checked={filters.sortByNameAsc}
+            checked={filterControls.sortByNameAsc}
           />
           <span className="checkmark"></span>
         </label>
@@ -241,7 +287,7 @@ const FilterForm = () => {
           <input
             type="checkbox"
             onChange={(e) => onSortByName(e, "DESC")}
-            checked={filters.sortByNameDesc}
+            checked={filterControls.sortByNameDesc}
           />
           <span className="checkmark"></span>
         </label>
@@ -250,7 +296,7 @@ const FilterForm = () => {
           <input
             type="checkbox"
             onChange={(e) => onSortByWeight(e, "ASC")}
-            checked={filters.sortByWeightAsc}
+            checked={filterControls.sortByWeightAsc}
           />
           <span className="checkmark"></span>
         </label>
@@ -259,7 +305,7 @@ const FilterForm = () => {
           <input
             type="checkbox"
             onChange={(e) => onSortByWeight(e, "DESC")}
-            checked={filters.sortByWeightDesc}
+            checked={filterControls.sortByWeightDesc}
           />
           <span className="checkmark"></span>
         </label>

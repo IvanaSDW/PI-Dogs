@@ -115,11 +115,10 @@ export const filterByTemperamentAction = (temperament) => {
   } 
 }
 
-export const applyUserFiltersAction = (filters) => {
+export const applyUserFiltersAction = () => {
   return (dispatch) => {
     dispatch({
       type: APPLY_USER_FILTERS,
-      payload: filters,
     })
   }
 }

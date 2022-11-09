@@ -19,12 +19,11 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    setSearchTerm('')
-  }, [breedsToRender])
+    setSearchTerm("");
+  }, [breedsToRender]);
 
   useEffect(() => {
-    console.log('search term changed..');
-    dispatch({type: RESET_BREEDS_DB_ERROR})
+    if (breedDbError) dispatch({ type: RESET_BREEDS_DB_ERROR });
     setInputError((prevError) => {
       return {
         ...prevError,
@@ -72,7 +71,7 @@ const SearchBar = () => {
     if (e.keyCode === 13) {
       handleSubmit();
     }
-  }
+  };
 
   return (
     <div className="searchContainer">
@@ -101,11 +100,13 @@ const SearchBar = () => {
           breedDbError ? "error-visible" : "error-hidden"
         }`}
       >
-        {breedDbError ? <p>
-          {breedDbError.message.includes("404")
-            ? "No breeds found for " + searchTerm
-            : "Error fetching data"}
-        </p> : null}
+        {breedDbError ? (
+          <p>
+            {breedDbError.message.includes("404")
+              ? "No breeds found for " + searchTerm
+              : "Error fetching data"}
+          </p>
+        ) : null}
       </div>
     </div>
   );

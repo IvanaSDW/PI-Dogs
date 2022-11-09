@@ -28,7 +28,11 @@ const fetchApiTemperaments = async () => {
 const getAllTemperaments = async () => {
   // await fetchApiTemperaments();
   try {
-    return await Temperament.findAll();
+    return await Temperament.findAll({
+      order: [
+        ['name', 'ASC']
+      ]
+    });
   } catch (error) {
     console.log("error getting all temperaments from local db: ", error);
   }

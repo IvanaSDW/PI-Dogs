@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { UPDATE_CURRENT_PAGE } from "../../../redux/types/index.js";
 import DogCard from "../home/DogCard.jsx";
 import "./dogGrid.css";
 
 const DogGrid = () => {
-  console.log("rendered ");
-  //Global States
-  const { breedsToRender } = useSelector((state) => state.breeds);
+  const dispatch = useDispatch();
 
+  //Global States
+  const { breedsToRender, currentPage } = useSelector((state) => state.breeds);
+
+  console.log("Dog grid rendered on page: ", currentPage);
   // Local states
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [breedsThisPage, setBreedsThisPage] = useState();
   const [pageRange, setPageRange] = useState();
 
@@ -20,7 +23,7 @@ const DogGrid = () => {
     console.log("breedsToRender changed ");
 
     //calc pagination state first time
-    setCurrentPage(1);
+    // setCurrentPage(1);
     if (pageQty > 9) {
       setPageRange([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     } else {
@@ -49,7 +52,10 @@ const DogGrid = () => {
 
   const onPageChange = (page) => {
     if (page < 1 || page > pageQty) return;
-    setCurrentPage(page);
+    dispatch({
+      type: UPDATE_CURRENT_PAGE,
+      payload: page,
+    })
 
     const firstBreedToShow = page * 8 - 8;
     const lastBreedToshow = page * 8 > cardsQty ? cardsQty : page * 8;
