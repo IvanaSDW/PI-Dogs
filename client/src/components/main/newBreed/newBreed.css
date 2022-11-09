@@ -55,7 +55,7 @@
 }
 
 .new-breed-image {
-  object-fit: cover;
+  object-fit: scale-down;
   width: 50%;
   border-radius: 0 0 0 6px;
 }

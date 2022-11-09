@@ -17,6 +17,7 @@ const FilterForm = () => {
   const { breeds, breedsToRender } = useSelector((state) => state.breeds);
 
   //Local states
+  console.log('setting default filters at mount..');
   const [filters, setFilters] = useState({
     source: "all",
     sourceApi: false,
@@ -39,6 +40,7 @@ const FilterForm = () => {
   }, [breeds]);
 
   useEffect(() => {
+    console.log('filters changed...');
     dispatch(applyUserFiltersAction(filters));
   }, [
     filters.source,

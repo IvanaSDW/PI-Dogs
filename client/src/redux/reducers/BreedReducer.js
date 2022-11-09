@@ -9,6 +9,9 @@ import {
   FILTER_BY_SOURCE,
   FILTER_BY_TEMP,
   APPLY_USER_FILTERS,
+  GET_BREED_BY_ID_ERROR,
+  GET_BREED_BY_ID_SUCCESS,
+  RESET_BREEDS_DB_ERROR,
 } from "../types";
 
 const initialState = {
@@ -21,6 +24,23 @@ const initialState = {
 
 const breedsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CREATE_BREED_DB_ERROR:
+    case GET_ALL_BREEDS_ERROR:
+    case GET_BREEDS_BY_NAME_ERROR:
+    case GET_BREED_BY_ID_ERROR:
+      return {
+        ...state,
+        breedDbloading: false,
+        breedDbError: action.payload,
+        shallResetSearch: false,
+      };
+
+    case RESET_BREEDS_DB_ERROR:
+      return {
+        ...state,
+        breedDbError: false,
+      };
+
     case LOADING_DB_BREEDS:
       return {
         ...state,
@@ -35,16 +55,6 @@ const breedsReducer = (state = initialState, action) => {
         shallResetSearch: true,
       };
 
-    case CREATE_BREED_DB_ERROR:
-    case GET_ALL_BREEDS_ERROR:
-    case GET_BREEDS_BY_NAME_ERROR:
-      return {
-        ...state,
-        breedDbloading: false,
-        breedDbError: action.payload,
-        shallResetSearch: false,
-      };
-
     case GET_ALL_BREEDS_SUCCESS:
     case GET_BREEDS_BY_NAME_SUCCESS:
       return {
@@ -54,6 +64,13 @@ const breedsReducer = (state = initialState, action) => {
         breeds: action.payload,
         breedsToRender: action.payload,
         shallResetSearch: false,
+      };
+
+    case GET_BREED_BY_ID_SUCCESS:
+      return {
+        ...state,
+        breedDbloading: false,
+        breedDbError: false,
       };
 
     // case FILTER_BY_SOURCE:
@@ -97,7 +114,7 @@ const breedsReducer = (state = initialState, action) => {
     //   }
 
     case APPLY_USER_FILTERS: {
-      console.log('apply filters called with filters: ', action.payload)
+      console.log("apply filters called with filters: ", action.payload);
       const { source, filterTemp, sortByName, sortByWeight } = action.payload;
       let filtered = [];
       switch (source) {
@@ -135,7 +152,6 @@ const breedsReducer = (state = initialState, action) => {
           return 0;
         });
       }
-
 
       if (sortByWeight === "ASC") {
         filtered = filtered.sort((a, b) => {
@@ -179,7 +195,7 @@ const breedsReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        breedsToRender: filtered.map(e => e),
+        breedsToRender: filtered.map((e) => e),
       };
     }
     default:

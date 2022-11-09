@@ -145,7 +145,11 @@
   /* Header Image Shadow */
   box-shadow: 48px 24px 48px rgba(24, 37, 56, 0.12);
   border-radius: 8px;
-  transform: rotate(-7deg);
+  transform: perspective(500px) rotateY(15deg) rotateX(-4deg);
+}
+
+.praga-image:hover {
+    transform: perspective(1000px) rotateY(10deg) rotateX(-7deg);
 }
 
 .praga-badge {

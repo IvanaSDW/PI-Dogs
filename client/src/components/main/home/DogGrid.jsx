@@ -27,11 +27,14 @@ const DogGrid = () => {
       setPageRange([...Array(pageQty).keys()].map((i) => i + 1));
     }
 
-    const firstBreedToShow = currentPage * 8 - 8;
+    // const firstBreedToShow = currentPage * 8 - 8;
+    const firstBreedToShow = 0;
     const lastBreedToshow =
-      currentPage * 8 > breedsToRender.length
+      // currentPage * 8 > breedsToRender.length
+      8 > breedsToRender.length
         ? breedsToRender.length
-        : currentPage * 8;
+        : 8;
+        // : currentPage * 8;
 
     setBreedsThisPage(breedsToRender.slice(firstBreedToShow, lastBreedToshow));
 
@@ -55,12 +58,10 @@ const DogGrid = () => {
     if (pageQty < 10) return;
     const pagesLeft = pageQty - page;
     if (pagesLeft < 4) {
-      console.log("less than 4 pages to last one");
       setPageRange([...Array(9).keys()].map((i) => i + pageQty - 8));
       return;
     }
     if (page > 4) {
-      console.log("adjusting page range to when current page is above 4");
       setPageRange([...Array(9).keys()].map((i) => i + page - 4));
     } else {
       setPageRange(
@@ -68,8 +69,6 @@ const DogGrid = () => {
       );
     }
     console.log("page range: ", pageRange);
-    console.log("page qty: ", pageQty);
-    console.log("cards qty: ", cardsQty);
     console.log("firstBreedToShow: ", firstBreedToShow);
     console.log("lastBreedToshow: ", lastBreedToshow);
     console.log("breedsNow: ", breedsThisPage);

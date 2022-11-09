@@ -3,25 +3,24 @@ import rightArrow from "../../../assets/right-arrow.png";
 import { useHistory } from "react-router-dom";
 
 const DogCard = (props) => {
-
   const { breed } = props;
 
   const navigate = useHistory();
 
-  const onShowDetail = (id) => {
-    navigate.push(`/home/breeds/${id}`);
+  const onShowDetail = () => {
+    navigate.push(`/home/breeds/${breed.id}`);
   };
 
   return (
     <div className="dog-card">
-      <img
-        className="dog-image"
-        src={breed.image_url}
-        alt="breed"
-      />
+      {breed.image_url.includes("undefined") ? (
+        <h3 className="image-not-found">No image found</h3>
+      ) : (
+        <img className="dog-image" src={breed.image_url} alt="breed" />
+      )}
       <h4 className="breed-name">{breed.name}</h4>
       <div className="breed-temperament">
-        <p>{breed.temperaments.join(', ')}</p>
+        <p>{breed.temperaments.join(", ")}</p>
       </div>
       <div className="caption-line">
         <p className="weight">{`${breed.min_weight}-${breed.max_weight} kgs`}</p>
@@ -30,7 +29,7 @@ const DogCard = (props) => {
             className="arrow"
             src={rightArrow}
             alt="arrow"
-            onClick={() => onShowDetail(breed.id)}
+            onClick={() => onShowDetail()}
           />
         </button>
       </div>

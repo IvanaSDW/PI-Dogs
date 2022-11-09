@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBreedsByNameAction } from "../../../redux/actions/breedActions";
+import { RESET_BREEDS_DB_ERROR } from "../../../redux/types";
 import "./searchBar.css";
 
 const SearchBar = () => {
@@ -22,6 +23,8 @@ const SearchBar = () => {
   }, [breedsToRender])
 
   useEffect(() => {
+    console.log('search term changed..');
+    dispatch({type: RESET_BREEDS_DB_ERROR})
     setInputError((prevError) => {
       return {
         ...prevError,
@@ -65,6 +68,12 @@ const SearchBar = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+  }
+
   return (
     <div className="searchContainer">
       <div className="search-line">
@@ -74,6 +83,7 @@ const SearchBar = () => {
           type="text"
           value={searchTerm}
           onChange={handleInput}
+          onKeyDown={handleKeyDown}
         />
         <button className="searchButton" onClick={handleSubmit}>
           SEARCH BREED

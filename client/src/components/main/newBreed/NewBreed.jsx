@@ -1,4 +1,5 @@
 import "./newBreed.css";
+import dogPlaceHolder from '../../../assets/logo.png';
 import leftArrow from "../../../assets/left-arrow.png";
 import Footer from "../../footer/Footer";
 import NavBar from "../../header/NavBar";
@@ -12,6 +13,7 @@ import { validateAll } from "./formValidators";
 import TempCard from "./TempCard";
 import FabAddTemp from "./FabAddTemp";
 import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
+
 
 const NewBreed = ({ history }) => {
 
@@ -219,6 +221,8 @@ const NewBreed = ({ history }) => {
           <div className="card-body">
             <img
               src="https://placedog.net/600/600?r"
+              // src={dogPlaceHolder}
+              // src="https://source.unsplash.com/random/?Dog&1"
               alt="new breed"
               className="new-breed-image"
             />
