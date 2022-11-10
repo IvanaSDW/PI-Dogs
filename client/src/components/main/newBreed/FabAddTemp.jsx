@@ -49,7 +49,7 @@ const FabAddTemp = ({ onAdd }) => {
       case Cycle.LOADING:
         return "Loading";
       case Cycle.ERROR:
-        return tempsDbError.message;
+        return "That temp already exists";
       case Cycle.SUCCESS:
         return `"${newTemp}" succesfully added!`;
       default:

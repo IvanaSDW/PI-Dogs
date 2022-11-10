@@ -11,7 +11,6 @@
 }
 
 .filter-form select {
-  /* appearance: none; */
   background-color: #eee;
   border: none;
   padding: 0.5em 1em;
@@ -81,13 +80,13 @@
   display: block;
   position: relative;
   padding-left: 42px;
-  margin-bottom: 12px;
   cursor: pointer;
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   color: #000;
   text-transform: unset;
+  align-items: center;
 }
 
 .check-item input {
@@ -99,7 +98,6 @@
   border-radius: 6px;
 }
 
-/* Create a custom checkbox */
 .checkmark {
   position: absolute;
   top: 0;
@@ -111,29 +109,28 @@
   margin-left: 4px;
 }
 
-/* On mouse-over, add a grey background color */
 .check-item:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
-/* When the checkbox is checked, add a blue background */
+
 .check-item input:checked ~ .checkmark {
   background-color: #8c30f5;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
+
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
 
-/* Show the checkmark when checked */
+
 .check-item input:checked ~ .checkmark:after {
   display: block;
 }
 
-/* Style the checkmark/indicator */
+
 .check-item .checkmark:after {
   left: 6px;
   top: 2px;
@@ -165,7 +162,6 @@
   font-size: 16px;
   line-height: 24px;
   text-align: center;
-  font-feature-settings: "salt" on, "liga" off;
   color: #8c30f5;
 }
 
@@ -175,4 +171,8 @@
   flex: none;
   order: 1;
   flex-grow: 0;
+}
+
+.spacer {
+  height: 12px;
 }

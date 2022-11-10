@@ -15,6 +15,8 @@ import {
   UPDATE_USER_FILTERS,
   UPDATE_CURRENT_PAGE,
   SET_OPENED_DETAIL_TRUE,
+  ALL_SOURCES,
+  TEMPERAMENT_UNSELECTED,
 } from "../types";
 
 const initialState = {
@@ -26,10 +28,9 @@ const initialState = {
   shallResetSearch: false,
   userSearchKey: false,
   userFilters: {
-    source: "all",
-    filterTemp: "0",
-    sortByName: false,
-    sortByWeight: false,
+    source: ALL_SOURCES,
+    filterTemp: TEMPERAMENT_UNSELECTED,
+    sorting: false,
   },
   currentPage: 1,
   openedDetail: false,
@@ -100,6 +101,7 @@ const breedsReducer = (state = initialState, action) => {
       };
 
     case APPLY_USER_FILTERS: {
+      console.log('apply user filters called in reducer for: ', state.userFilters)
       const newCurrentPage = state.openedDetail ? state.currentPage : 1;
       return {
         ...state,
@@ -113,8 +115,8 @@ const breedsReducer = (state = initialState, action) => {
       return {
         ...state,
         userFilters: {
-          source: "all",
-          filterTemp: "0",
+          source: ALL_SOURCES,
+          filterTemp: TEMPERAMENT_UNSELECTED,
           sortByName: false,
           sortByWeight: false,
         },

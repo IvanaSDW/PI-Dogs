@@ -7,27 +7,35 @@ import {
   applyUserFiltersAction,
   getAllBreedsAction,
 } from "../../../redux/actions/breedActions";
-import { RESET_USER_FILTERS, UPDATE_USER_FILTERS } from "../../../redux/types";
+import {
+  ALL_SOURCES,
+  DOGS_API,
+  NAME_ASCENDING,
+  NAME_DESCENDING,
+  RESET_USER_FILTERS,
+  TEMPERAMENT_UNSELECTED,
+  UPDATE_USER_FILTERS,
+  USER_CREATED,
+  WEIGHT_ASCENDING,
+  WEIGHT_DESCENDING,
+} from "../../../redux/types";
 
 const FilterForm = () => {
   const navigate = useHistory();
   const dispatch = useDispatch();
 
   // GLobal states
-  // const temperaments = useSelector((state) => state.temps.temperaments);
   const { breedsToRender, userFilters, userSearchKey } = useSelector(
     (state) => state.breeds
   );
 
   //Local states
   const [filterControls, setFilterControls] = useState({
-    sourceApi: userFilters.source === "api" ? true : false,
-    sourceLocal: userFilters.source === "local" ? true : false,
+    sourceApi: userFilters.source === DOGS_API ? true : false,
+    sourceLocal: userFilters.source === USER_CREATED ? true : false,
     filterTemp: userFilters.filterTemp,
-    sortByNameAsc: userFilters.sortByName === "ASC" ? true : false,
-    sortByNameDesc: userFilters.sortByName === "DESC" ? true : false,
-    sortByWeightAsc: userFilters.sortByWeight === "ASC" ? true : false,
-    sortByWeightDesc: userFilters.sortByWeight === "DESC" ? true : false,
+    sortByName: false,
+    sortByWeight: false,
   });
 
   let temperamentsOnRenderedBreeds = new Set();
@@ -53,7 +61,7 @@ const FilterForm = () => {
       dispatch({
         type: UPDATE_USER_FILTERS,
         payload: {
-          source: "local",
+          source: USER_CREATED,
         },
       });
 
@@ -66,7 +74,7 @@ const FilterForm = () => {
       dispatch({
         type: UPDATE_USER_FILTERS,
         payload: {
-          source: "all",
+          source: ALL_SOURCES,
         },
       });
       setFilterControls({
@@ -82,7 +90,7 @@ const FilterForm = () => {
       dispatch({
         type: UPDATE_USER_FILTERS,
         payload: {
-          source: "api",
+          source: DOGS_API,
         },
       });
 
@@ -95,7 +103,7 @@ const FilterForm = () => {
       dispatch({
         type: UPDATE_USER_FILTERS,
         payload: {
-          source: "all",
+          source: ALL_SOURCES,
         },
       });
       setFilterControls({
@@ -106,92 +114,42 @@ const FilterForm = () => {
     }
   };
 
-  const onSortByName = (e, order) => {
+  const onSortChanged = (e, criteria) => {
+    console.log("sort affected: ", e.target.name);
+    let sortString = userFilters.sorting ? userFilters.sorting : "";
     if (e.target.checked) {
-      if (order === "ASC") {
-        dispatch({
-          type: UPDATE_USER_FILTERS,
-          payload: {
-            sortByName: "ASC",
-          },
-        });
-        setFilterControls({
-          ...filterControls,
-          sortByNameAsc: true,
-          sortByNameDesc: false,
-        });
+      const indexOfExistingCriteria = sortString.indexOf(criteria.slice(0, -2));
+      if (indexOfExistingCriteria >= 0) {
+        sortString =
+          sortString.substring(0, indexOfExistingCriteria) +
+          criteria +
+          sortString.substring(indexOfExistingCriteria + criteria.length);
       } else {
-        dispatch({
-          type: UPDATE_USER_FILTERS,
-          payload: {
-            sortByName: "DESC",
-          },
-        });
-        setFilterControls({
-          ...filterControls,
-          sortByNameAsc: false,
-          sortByNameDesc: true,
-        });
+        sortString = sortString + criteria;
       }
-    } else {
-      dispatch({
-        type: UPDATE_USER_FILTERS,
-        payload: {
-          sortByName: false,
-        },
-      });
-      setFilterControls({
-        ...filterControls,
-        sortByNameAsc: false,
-        sortByNameDesc: false,
-      });
-    }
-  };
 
-  const onSortByWeight = (e, order) => {
-    if (e.target.checked) {
-      if (order === "ASC") {
-        dispatch({
-          type: UPDATE_USER_FILTERS,
-          payload: {
-            sortByWeight: "ASC",
-          },
-        });
-        setFilterControls({
-          ...filterControls,
-          sortByWeightAsc: true,
-          sortByWeightDesc: false,
-        });
-      } else {
-        dispatch({
-          type: UPDATE_USER_FILTERS,
-          payload: {
-            sortByWeight: "DESC",
-          },
-        });
-        setFilterControls({
-          ...filterControls,
-          sortByWeightAsc: false,
-          sortByWeightDesc: true,
-        });
-      }
-    } else {
-      dispatch({
-        type: UPDATE_USER_FILTERS,
-        payload: {
-          sortByWeight: false,
-        },
-      });
       setFilterControls({
         ...filterControls,
-        sortByWeightAsc: false,
-        sortByWeightDesc: false,
+        [e.target.name]: criteria,
+      });
+    } else {
+      sortString = sortString.replace(criteria, "");
+      setFilterControls({
+        ...filterControls,
+        [e.target.name]: false,
       });
     }
+    if (sortString === "") sortString = false;
+    console.log("dispatching sorting filter: ", sortString);
+    dispatch({
+      type: UPDATE_USER_FILTERS,
+      payload: {
+        sorting: sortString,
+      },
+    });
   };
 
   const onFilterTempSelected = (e) => {
-    console.log("Temp filter selected");
     dispatch({
       type: UPDATE_USER_FILTERS,
       payload: {
@@ -211,11 +169,9 @@ const FilterForm = () => {
     setFilterControls({
       sourceApi: false,
       sourceLocal: false,
-      filterTemp: "0",
-      sortByNameAsc: false,
-      sortByNameDesc: false,
-      sortByWeightAsc: false,
-      sortByWeightDesc: false,
+      filterTemp: TEMPERAMENT_UNSELECTED,
+      sortByName: false,
+      sortByWeight: false,
     });
     dispatch(getAllBreedsAction());
   };
@@ -235,10 +191,12 @@ const FilterForm = () => {
           </button>
         </div>
         <div className="current-filters-tags">
-          {`${userSearchKey ? userSearchKey + " >" : ""} ${
-            userFilters.source !== "all" ? userFilters.source + " >" : ""
+          {`${userFilters.source + " >"} ${
+            userSearchKey ? userSearchKey.toLowerCase() + " >" : ""
           } ${
-            userFilters.filterTemp !== "0" ? userFilters.filterTemp + " >" : ""
+            userFilters.filterTemp !== TEMPERAMENT_UNSELECTED
+              ? userFilters.filterTemp.toLowerCase() + " >"
+              : ""
           }`}
         </div>
         <div className="form-divider"></div>
@@ -252,8 +210,8 @@ const FilterForm = () => {
           value={userFilters.filterTemp}
           onChange={onFilterTempSelected}
         >
-          <option key="0" value={"0"}>
-            Select temperament
+          <option key={TEMPERAMENT_UNSELECTED} value={TEMPERAMENT_UNSELECTED}>
+            All temperaments
           </option>
           {[...temperamentsOnRenderedBreeds].sort().map((temp) => {
             return (
@@ -265,7 +223,7 @@ const FilterForm = () => {
             );
           })}
         </select>
-        <div className="form-divider"></div>
+        {/* <div className="form-divider"></div> */}
         <h4 htmlFor="input-source" className="form-label">
           SOURCE
         </h4>
@@ -288,42 +246,67 @@ const FilterForm = () => {
           <span className="checkmark"></span>
         </label>
         <div className="form-divider"></div>
-        <h4 htmlFor="input-source" className="form-label">
+        {/* <h4 htmlFor="input-source" className="form-label sort-label">
           SORT BY
-        </h4>
+        </h4> */}
+        <div className="spacer"></div>
+        <h3 className="form-title">Sorting</h3>
+
+        <div className="current-filters-tags">
+          {`${
+            userFilters.sorting
+              ? userFilters.sorting
+                  .replace("\u2191", "\u2191 - ")
+                  .replace("\u2193", "\u2193 - ")
+              : "unordered"
+          } `}
+        </div>
+        <div className="form-divider"></div>
         <label className="check-item">
-          Breed name ASC
+          {"Breed name \u2191"}
           <input
             type="checkbox"
-            onChange={(e) => onSortByName(e, "ASC")}
-            checked={filterControls.sortByNameAsc}
+            // name="sortByNameAsc"
+            name="sortByName"
+            // onChange={(e) => onSortByName(e, NAME_ASCENDING)}
+            onChange={(e) => onSortChanged(e, NAME_ASCENDING)}
+            checked={filterControls.sortByName === NAME_ASCENDING}
           />
           <span className="checkmark"></span>
         </label>
         <label className="check-item">
-          Breed name DESC
+          {"Breed name \u2193"}
           <input
             type="checkbox"
-            onChange={(e) => onSortByName(e, "DESC")}
-            checked={filterControls.sortByNameDesc}
+            // name="sortByNameDesc"
+            name="sortByName"
+            // onChange={(e) => onSortByName(e, NAME_DESCENDING)}
+            onChange={(e) => onSortChanged(e, NAME_DESCENDING)}
+            checked={filterControls.sortByName === NAME_DESCENDING}
           />
           <span className="checkmark"></span>
         </label>
         <label className="check-item">
-          Average weight ASC
+          {"Average weight \u2191"}
           <input
             type="checkbox"
-            onChange={(e) => onSortByWeight(e, "ASC")}
-            checked={filterControls.sortByWeightAsc}
+            // name="sortByWeightAsc"
+            name="sortByWeight"
+            // onChange={(e) => onSortByWeight(e, WEIGHT_ASCENDING)}
+            onChange={(e) => onSortChanged(e, WEIGHT_ASCENDING)}
+            checked={filterControls.sortByWeight === WEIGHT_ASCENDING}
           />
           <span className="checkmark"></span>
         </label>
         <label className="check-item">
-          Average weight DESC
+          {"Average weight \u2193"}
           <input
             type="checkbox"
-            onChange={(e) => onSortByWeight(e, "DESC")}
-            checked={filterControls.sortByWeightDesc}
+            // name="sortByWeightDesc"
+            name="sortByWeight"
+            // onChange={(e) => onSortByWeight(e, WEIGHT_DESCENDING)}
+            onChange={(e) => onSortChanged(e, WEIGHT_DESCENDING)}
+            checked={filterControls.sortByWeight === WEIGHT_DESCENDING}
           />
           <span className="checkmark"></span>
         </label>

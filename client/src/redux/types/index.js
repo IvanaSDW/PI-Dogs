@@ -28,3 +28,27 @@ export const CREATE_TEMP_DB_ERROR = "CREATE_TEMP_DB_ERROR";
 export const GET_ALL_TEMPS_SUCESS = "GET_ALL_TEMPS_SUCESS";
 export const GET_ALL_TEMPS_ERROR = "GET_ALL_TEMPS_SUCESS";
 export const GET_TEMP_BY_ID = "GET_TEMP_BY_ID";
+
+
+//Global constants
+
+//filter tags
+export const ALL_SOURCES = 'all sources';
+export const USER_CREATED = 'user created';
+export const DOGS_API = 'dogs api';
+export const TEMPERAMENT_UNSELECTED = '0';
+
+//sorting tags
+export const NAME_ASCENDING = 'name \u2191';
+export const NAME_DESCENDING = 'name \u2193';
+export const WEIGHT_ASCENDING = 'weight \u2191';
+export const WEIGHT_DESCENDING = 'weight \u2193';
+export const NAME_ASC_WEIGHT_ASC = 'name \u2191weight \u2191';
+export const NAME_ASC_WEIGHT_DESC = 'name \u2191weight \u2193';
+export const NAME_DESC_WEIGHT_ASC = 'name \u2193weight \u2191';
+export const NAME_DESC_WEIGHT_DESC = 'name \u2193weight \u2193';
+export const WEIGHT_ASC_NAME_ASC = 'weight \u2191name \u2191';
+export const WEIGHT_ASC_NAME_DESC = 'weight \u2191name \u2193';
+export const WEIGHT_DESC_NAME_ASC = 'weight \u2193name \u2191';
+export const WEIGHT_DESC_NAME_DESC = 'weight \u2193name \u2193';
+
