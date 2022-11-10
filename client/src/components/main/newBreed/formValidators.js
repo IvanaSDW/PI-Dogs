@@ -1,4 +1,31 @@
 export const validateName = (value, setErr) => {
+
+  const regex = /^[A-Za-z0-9 ]+$/
+  console.log('imput lenght is: ', value.length)
+  if (!regex.test(value) && value.length > 0) {
+    setErr((prevErr) => {
+      return {
+        ...prevErr,
+        name: { touched: true, error: true, message: "Special chars not allowed" },
+      };
+    });
+    return;
+  }
+
+  if(value.trim().length > 50) {
+    setErr((prevErr) => {
+      return {
+        ...prevErr,
+        name: {
+          touched: true,
+          error: true,
+          message: "Name should have 50 chars max.",
+        },
+      };
+    });
+    return;
+  }
+
   if (value.trim().length < 2) {
     setErr((prevErr) => {
       return {
@@ -24,6 +51,7 @@ export const validateName = (value, setErr) => {
 };
 
 const validateNumericField = (value) => {
+
   if (typeof value !== "number") {
     return {
       touched: true,
@@ -220,6 +248,7 @@ export const validateTemperaments = (value, setErr) => {
 
 export const validateAll = (formState, fieldErrors, setErr) => {
   if (fieldErrors.name.touched) validateName(formState.name, setErr);
+  // validateName(formState.name, setErr);
   validateHeight(
     formState.min_height,
     formState.max_height,

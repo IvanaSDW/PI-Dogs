@@ -89,7 +89,7 @@ export const getBreedsByNameAction = (name) => {
       });
       dispatch({
         type: GET_BREEDS_BY_NAME_SUCCESS,
-        payload: response.data,
+        payload: { data: response.data, keyWord: name }
       });
     } catch (error) {
       dispatch({

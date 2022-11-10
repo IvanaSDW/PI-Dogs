@@ -7,19 +7,15 @@ import {
   applyUserFiltersAction,
   getAllBreedsAction,
 } from "../../../redux/actions/breedActions";
-import {
-  RESET_USER_FILTERS,
-  UPDATE_CURRENT_PAGE,
-  UPDATE_USER_FILTERS,
-} from "../../../redux/types";
+import { RESET_USER_FILTERS, UPDATE_USER_FILTERS } from "../../../redux/types";
 
 const FilterForm = () => {
   const navigate = useHistory();
   const dispatch = useDispatch();
 
   // GLobal states
-  const temperaments = useSelector((state) => state.temps.temperaments);
-  const { breeds, breedsToRender, userFilters } = useSelector(
+  // const temperaments = useSelector((state) => state.temps.temperaments);
+  const { breedsToRender, userFilters, userSearchKey } = useSelector(
     (state) => state.breeds
   );
 
@@ -34,12 +30,17 @@ const FilterForm = () => {
     sortByWeightDesc: userFilters.sortByWeight === "DESC" ? true : false,
   });
 
+  let temperamentsOnRenderedBreeds = new Set();
+
+  breedsToRender.map(
+    (breed) =>
+      (temperamentsOnRenderedBreeds = new Set([
+        ...temperamentsOnRenderedBreeds,
+        ...breed.temperaments,
+      ]))
+  );
+
   useEffect(() => {
-    console.log("filterControls changed...");
-    // dispatch({
-    //   type: UPDATE_CURRENT_PAGE,
-    //   payload: 1,
-    // });
     dispatch(applyUserFiltersAction());
   }, [filterControls]);
 
@@ -190,6 +191,7 @@ const FilterForm = () => {
   };
 
   const onFilterTempSelected = (e) => {
+    console.log("Temp filter selected");
     dispatch({
       type: UPDATE_USER_FILTERS,
       payload: {
@@ -203,7 +205,6 @@ const FilterForm = () => {
   };
 
   const onClearFilters = () => {
-    console.log("Clear filters called");
     dispatch({
       type: RESET_USER_FILTERS,
     });
@@ -233,6 +234,13 @@ const FilterForm = () => {
             Clear all
           </button>
         </div>
+        <div className="current-filters-tags">
+          {`${userSearchKey ? userSearchKey + " >" : ""} ${
+            userFilters.source !== "all" ? userFilters.source + " >" : ""
+          } ${
+            userFilters.filterTemp !== "0" ? userFilters.filterTemp + " >" : ""
+          }`}
+        </div>
         <div className="form-divider"></div>
         <h4 htmlFor="input-temperament" className="form-label">
           TEMPERAMENT
@@ -241,16 +249,18 @@ const FilterForm = () => {
           name="temperament"
           id="input-temperament"
           className="temperament-select"
-          value={filterControls.filterTemp}
+          value={userFilters.filterTemp}
           onChange={onFilterTempSelected}
         >
           <option key="0" value={"0"}>
             Select temperament
           </option>
-          {temperaments.map((temp) => {
+          {[...temperamentsOnRenderedBreeds].sort().map((temp) => {
             return (
-              <option key={temp.id} value={temp.name}>
-                {temp.name}
+              // <option key={temp.id} value={temp.name}>
+              <option key={temp} value={temp}>
+                {/* {temp.name} */}
+                {temp}
               </option>
             );
           })}

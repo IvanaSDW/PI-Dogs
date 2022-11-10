@@ -30,7 +30,7 @@ const FabAddTemp = ({ onAdd }) => {
   }, [tempsDbError, tempsDbloading]);
 
   const takeInput = (e) => {
-    setNewTemp(e.target.value);
+    setNewTemp(e.target.value.trim().slice(0,24));
     resetMessage();
   };
 

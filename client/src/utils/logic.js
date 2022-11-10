@@ -26,82 +26,68 @@ export const calcBreedsToShowRange = (currentPage, cardsQty) => {
   const firstBreedToShow = currentPage * 8 - 8;
   const lastBreedToshow =
     currentPage * 8 > cardsQty ? cardsQty : currentPage * 8;
-    return {first: firstBreedToShow, last: lastBreedToshow}
+  return { first: firstBreedToShow, last: lastBreedToshow };
 };
 
 export const applyFilters = (breedsToFilter, userFilters) => {
-  console.log("apply filters called");
-      const { source, filterTemp, sortByName, sortByWeight } =
-        userFilters;
-      let filtered = [];
-      switch (source) {
-        case "all":
-          filtered = breedsToFilter;
-          break;
-        case "local":
-          filtered = breedsToFilter.filter((breed) => breed.is_local);
-          break;
-        case "api":
-          filtered = breedsToFilter.filter((breed) => !breed.is_local);
-          break;
-        default:
-          filtered = breedsToFilter;
-          break;
-      }
+  const { source, filterTemp, sortByName, sortByWeight } = userFilters;
+  let filtered = [];
+  switch (source) {
+    case "all":
+      filtered = breedsToFilter;
+      break;
+    case "local":
+      filtered = breedsToFilter.filter((breed) => breed.is_local);
+      break;
+    case "api":
+      filtered = breedsToFilter.filter((breed) => !breed.is_local);
+      break;
+    default:
+      filtered = breedsToFilter;
+      break;
+  }
 
-      if (filterTemp !== "0") {
-        filtered = filtered.filter((breed) =>
-          breed.temperaments.includes(filterTemp)
-        );
-      }
+  if (filterTemp !== "0") {
+    filtered = filtered.filter((breed) =>
+      breed.temperaments.includes(filterTemp)
+    );
+  }
 
-      if (sortByName === "ASC") {
-        filtered = filtered.sort((a, b) => {
-          if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
-          if (b.name.toUpperCase() > a.name.toUpperCase()) return -1;
-          return 0;
-        });
-      }
+  if (sortByName === "ASC") {
+    filtered = filtered.sort((a, b) => {
+      if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
+      if (b.name.toUpperCase() > a.name.toUpperCase()) return -1;
+      return 0;
+    });
+  }
 
-      if (sortByName === "DESC") {
-        filtered = filtered.sort((a, b) => {
-          if (a.name.toUpperCase() > b.name.toUpperCase()) return -1;
-          if (b.name.toUpperCase() > a.name.toUpperCase()) return 1;
-          return 0;
-        });
-      }
+  if (sortByName === "DESC") {
+    filtered = filtered.sort((a, b) => {
+      if (a.name.toUpperCase() > b.name.toUpperCase()) return -1;
+      if (b.name.toUpperCase() > a.name.toUpperCase()) return 1;
+      return 0;
+    });
+  }
 
-      if (sortByWeight === "ASC") {
-        filtered = filtered.sort((a, b) => {
-          if (
-            (a.min_weight + a.max_weight) / 2 >
-            (b.min_weight + b.max_weight) / 2
-          )
-            return 1;
-          if (
-            (b.min_weight + b.max_weight) / 2 >
-            (a.min_weight + a.max_weight) / 2
-          )
-            return -1;
-          return 0;
-        });
-      }
+  if (sortByWeight === "ASC") {
+    filtered = filtered.sort((a, b) => {
+      if ((a.min_weight + a.max_weight) / 2 > (b.min_weight + b.max_weight) / 2)
+        return 1;
+      if ((b.min_weight + b.max_weight) / 2 > (a.min_weight + a.max_weight) / 2)
+        return -1;
+      return 0;
+    });
+  }
 
-      if (sortByWeight === "DESC") {
-        filtered = filtered.sort((a, b) => {
-          if (
-            (a.min_weight + a.max_weight) / 2 >
-            (b.min_weight + b.max_weight) / 2
-          )
-            return -1;
-          if (
-            (b.min_weight + b.max_weight) / 2 >
-            (a.min_weight + a.max_weight) / 2
-          )
-            return 1;
-          return 0;
-        });
-      }
+  if (sortByWeight === "DESC") {
+    filtered = filtered.sort((a, b) => {
+      if ((a.min_weight + a.max_weight) / 2 > (b.min_weight + b.max_weight) / 2)
+        return -1;
+      if ((b.min_weight + b.max_weight) / 2 > (a.min_weight + a.max_weight) / 2)
+        return 1;
+      return 0;
+    });
+  }
 
-      return filtered.map((e) => e);
-}
+  return filtered.map((e) => e);
+};

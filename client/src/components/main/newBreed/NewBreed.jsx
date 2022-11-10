@@ -98,7 +98,7 @@ const NewBreed = ({ history }) => {
 
   /* */
 
-  const forbiddenChars = ["e", "-", "+", "."]; // Avoid in numeric fields
+  const forbiddenInNumericFields = ["e", "-", "+", "."]; // Avoid in numeric fields
 
   useEffect(() => {
     validateAll(newBreedObj, fieldErrors, setFieldErrors);
@@ -192,7 +192,14 @@ const NewBreed = ({ history }) => {
     let inputValue;
     if (e.target.type === "number" && e.target.value.length > 0)
       inputValue = Number(e.target.value);
-    else inputValue = e.target.value;
+    else inputValue = e.target.value.trimStart();
+
+    if (inputField === 'name' && inputValue.length > 2) {
+      setFieldErrors({
+        ...fieldErrors,
+        name: {...fieldErrors.name, touched: true}
+      })
+    }
 
     setNewBreedObj((prevObj) => {
       return { ...prevObj, [inputField]: inputValue };
@@ -274,7 +281,7 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenChars.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_height}
@@ -311,7 +318,7 @@ const NewBreed = ({ history }) => {
                           }}
                           value={newBreedObj.max_height}
                           onKeyDown={(e) =>
-                            forbiddenChars.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
                           onBlur={(e) =>
@@ -351,7 +358,7 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenChars.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_weight}
@@ -387,7 +394,7 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenChars.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_weight}
@@ -428,7 +435,7 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenChars.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_years}
@@ -464,7 +471,7 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenChars.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_years}

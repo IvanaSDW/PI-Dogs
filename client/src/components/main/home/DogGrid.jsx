@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_CURRENT_PAGE } from "../../../redux/types/index.js";
-import {
-  calcBreedsToShowRange,
-  calcPageRange,
-} from "../../../utils/logic.js";
+import { calcBreedsToShowRange, calcPageRange } from "../../../utils/logic.js";
 import DogCard from "../home/DogCard.jsx";
 import "./dogGrid.css";
 
@@ -13,7 +10,6 @@ const DogGrid = () => {
 
   //Global States
   const { breedsToRender, currentPage } = useSelector((state) => state.breeds);
-  console.log("Dog grid rendered on page: ", currentPage);
 
   const cardsQty = breedsToRender.length;
   const pageQty = Math.ceil(cardsQty / 8);
@@ -28,23 +24,12 @@ const DogGrid = () => {
   );
 
   useEffect(() => {
-    console.log("breedsToRender changed ");
-
     setPageRange(calcPageRange(currentPage, pageQty));
 
-    setbreedsToShowRange(calcBreedsToShowRange(currentPage, cardsQty))
-
-    console.log("currentPage state: ", currentPage);
-    console.log("page range: ", pageRange);
-    console.log("page qty: ", pageQty);
-    console.log("cards qty: ", cardsQty);
-    console.log("firstBreedToShow: ", breedsToShowRange.first);
-    console.log("lastBreedToshow: ", breedsToShowRange.last);
-
+    setbreedsToShowRange(calcBreedsToShowRange(currentPage, cardsQty));
   }, [breedsToRender]);
 
   const onPageChange = (page) => {
-    console.log('page change called');
     if (page < 1 || page > pageQty) return;
     dispatch({
       type: UPDATE_CURRENT_PAGE,
@@ -53,24 +38,23 @@ const DogGrid = () => {
 
     setPageRange(calcPageRange(page, pageQty));
 
-    setbreedsToShowRange(calcBreedsToShowRange(page, cardsQty))
-
-    console.log("page range: ", pageRange);
-    console.log("firstBreedToShow: ", breedsToShowRange.first);
-    console.log("lastBreedToshow: ", breedsToShowRange.last);
+    setbreedsToShowRange(calcBreedsToShowRange(page, cardsQty));
   };
 
   return (
     <>
       <div className="gridContainer">
-        {breedsToRender.length > 0 ?
-        breedsToRender
-          .slice(breedsToShowRange.first, breedsToShowRange.last)
-          .map((breed) => {
-            return <DogCard key={breed.id} breed={breed} />;
-          })
-          : <h3>No breeds match current filters</h3>
-          }
+        {breedsToRender.length > 0 ? (
+          breedsToRender
+            .slice(breedsToShowRange.first, breedsToShowRange.last)
+            .map((breed) => {
+              return <DogCard key={breed.id} breed={breed} />;
+            })
+        ) : (
+          <div className="no-breeds-message">
+            <p>No breeds match current filters</p>
+          </div>
+        )}
       </div>
       <div className={`paginator-container ${pageQty < 2 ? "hidden" : ""}`}>
         <div className="pagination-divider"></div>

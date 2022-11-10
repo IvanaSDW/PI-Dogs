@@ -24,6 +24,7 @@ const initialState = {
   breedDbError: null,
   breedDbloading: false,
   shallResetSearch: false,
+  userSearchKey: false,
   userFilters: {
     source: "all",
     filterTemp: "0",
@@ -68,25 +69,25 @@ const breedsReducer = (state = initialState, action) => {
       };
 
     case GET_ALL_BREEDS_SUCCESS:
-      console.log("Reducer case GET_ALL_BREEDS_SUCCESS called");
       return {
         ...state,
         breedDbloading: false,
         breedDbError: false,
         breeds: action.payload,
+        userSearchKey: false,
         breedsSearched: action.payload,
         breedsToRender: action.payload,
         shallResetSearch: false,
         currentPage: 1,
       };
     case GET_BREEDS_BY_NAME_SUCCESS:
-      console.log("Reducer case GET_BREEDS_BY_NAME called");
       return {
         ...state,
         breedDbloading: false,
         breedDbError: false,
-        breedsSearched: action.payload,
-        breedsToRender: applyFilters(action.payload, state.userFilters),
+        userSearchKey: action.payload.keyWord,
+        breedsSearched: action.payload.data,
+        breedsToRender: applyFilters(action.payload.data, state.userFilters),
         shallResetSearch: false,
         currentPage: 1,
       };
@@ -99,13 +100,12 @@ const breedsReducer = (state = initialState, action) => {
       };
 
     case APPLY_USER_FILTERS: {
-
       const newCurrentPage = state.openedDetail ? state.currentPage : 1;
       return {
         ...state,
         breedsToRender: applyFilters(state.breedsSearched, state.userFilters),
         currentPage: newCurrentPage,
-        openedDetail: false
+        openedDetail: false,
       };
     }
 

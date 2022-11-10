@@ -34,7 +34,7 @@ const SearchBar = () => {
   }, [searchTerm]);
 
   const handleInput = (e) => {
-    const keyWord = e.target.value.trimStart();
+    const keyWord = e.target.value.trimStart().slice(0, 50);
     setSearchTerm((prevState) => {
       prevState = keyWord;
       return prevState;
