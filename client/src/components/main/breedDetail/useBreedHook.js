@@ -63,7 +63,7 @@ export const useBreed = (breedId) => {
         setBreedData(breedObj);
       });
     }
-  }, [breedId]);
+  }, [breedId, dispatch]);
 
   return breedData;
 };

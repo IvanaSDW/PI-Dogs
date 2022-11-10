@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import "./breedDetail.css";
 import leftArrow from "../../../assets/left-arrow.png";
-import fav_on from "../../../assets/favorite_on.png";
+// import fav_on from "../../../assets/favorite_on.png";
 import fav_off from "../../../assets/favorite_off.png";
 import NavBar from "../../header/NavBar.jsx";
 import Footer from "../../footer/Footer";

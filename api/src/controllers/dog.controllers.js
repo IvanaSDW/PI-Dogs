@@ -73,7 +73,7 @@ const getAllDogs = async () => {
 };
 
 const getLocalDogsByBreed = async (breed) => {
-  return await Dog.findAll({
+  const breedsByName =  await Dog.findAll({
     include: Temperament,
     attributes: [
       "id",
@@ -88,6 +88,18 @@ const getLocalDogsByBreed = async (breed) => {
     },
     order: [["name", "ASC"]],
   });
+
+  const mappedDogs = breedsByName.map((breed) => {
+    const thisTemps = breed.temperaments.map((temp) => {
+      return temp.dataValues.name;
+    });
+    const mappedDog = {
+      ...breed.dataValues,
+      temperaments: thisTemps,
+    };
+    return mappedDog;
+  });
+  return mappedDogs;
 };
 
 const getApiDogsByBreed = async (breed) => {

@@ -10,10 +10,6 @@ import {
   GET_BREEDS_BY_NAME_SUCCESS,
   FILTER_BY_SOURCE,
   FILTER_BY_TEMP,
-  SORT_BY_NAME_ASC,
-  SORT_BY_NAME_DESC,
-  SORT_BY_WEIGHT_ASC,
-  SORT_BY_WEIGHT_DESC,
   APPLY_USER_FILTERS,
 } from "../types";
 import axiosClient from "../../utils/axios.js";

@@ -3,7 +3,7 @@ import DogGrid from "./DogGrid";
 import "./home.css";
 import FilterForm from "./FilterForm";
 import Footer from "../../footer/Footer.jsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBreedsAction } from "../../../redux/actions/breedActions.js";
 
@@ -11,7 +11,7 @@ const Home = () => {
 
   const dispatch = useDispatch();
   //globalState
-  const { shallResetSearch, breedDbError, breedDbloading } = useSelector(
+  const { shallResetSearch } = useSelector(
     (state) => state.breeds
   );
   
@@ -19,7 +19,7 @@ const Home = () => {
     if (shallResetSearch) {
       dispatch(getAllBreedsAction());
     }
-  }, [shallResetSearch])
+  }, [shallResetSearch, dispatch])
 
 
   return (

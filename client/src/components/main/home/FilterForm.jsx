@@ -40,6 +40,8 @@ const FilterForm = () => {
 
   let temperamentsOnRenderedBreeds = new Set();
 
+  console.log("breeds render: ", breedsToRender);
+
   breedsToRender.map(
     (breed) =>
       (temperamentsOnRenderedBreeds = new Set([
@@ -48,9 +50,14 @@ const FilterForm = () => {
       ]))
   );
 
+  console.log(
+    "temperaments on breeds to render: ",
+    temperamentsOnRenderedBreeds
+  );
+
   useEffect(() => {
     dispatch(applyUserFiltersAction());
-  }, [filterControls]);
+  }, [filterControls, dispatch]);
 
   const onCreateBreedClicked = () => {
     navigate.push("/home/newBreed");

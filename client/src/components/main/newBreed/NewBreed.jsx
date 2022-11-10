@@ -1,5 +1,5 @@
 import "./newBreed.css";
-import dogPlaceHolder from '../../../assets/logo.png';
+// import dogPlaceHolder from '../../../assets/logo.png';
 import leftArrow from "../../../assets/left-arrow.png";
 import Footer from "../../footer/Footer";
 import NavBar from "../../header/NavBar";
