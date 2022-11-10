@@ -101,7 +101,6 @@ const breedsReducer = (state = initialState, action) => {
       };
 
     case APPLY_USER_FILTERS: {
-      console.log('apply user filters called in reducer for: ', state.userFilters)
       const newCurrentPage = state.openedDetail ? state.currentPage : 1;
       return {
         ...state,

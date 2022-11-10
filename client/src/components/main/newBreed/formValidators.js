@@ -1,7 +1,6 @@
 export const validateName = (value, setErr) => {
 
   const regex = /^[A-Za-z0-9 ]+$/
-  console.log('imput lenght is: ', value.length)
   if (!regex.test(value) && value.length > 0) {
     setErr((prevErr) => {
       return {
@@ -230,7 +229,6 @@ export const validateTemperaments = (value, setErr) => {
         },
       };
     });
-    console.log('validated temperamentes when lenght was: ', value.length)
     return;
   }
 

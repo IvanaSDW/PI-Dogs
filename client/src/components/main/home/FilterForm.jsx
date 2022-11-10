@@ -115,7 +115,6 @@ const FilterForm = () => {
   };
 
   const onSortChanged = (e, criteria) => {
-    console.log("sort affected: ", e.target.name);
     let sortString = userFilters.sorting ? userFilters.sorting : "";
     if (e.target.checked) {
       const indexOfExistingCriteria = sortString.indexOf(criteria.slice(0, -2));
@@ -140,7 +139,6 @@ const FilterForm = () => {
       });
     }
     if (sortString === "") sortString = false;
-    console.log("dispatching sorting filter: ", sortString);
     dispatch({
       type: UPDATE_USER_FILTERS,
       payload: {

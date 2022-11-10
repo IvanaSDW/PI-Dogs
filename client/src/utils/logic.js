@@ -55,7 +55,7 @@ export const applyFilters = (breedsToFilter, userFilters) => {
   let filtered = [];
   switch (source) {
     case ALL_SOURCES:
-      filtered = breedsToFilter;
+      filtered = [...breedsToFilter];
       break;
     case USER_CREATED:
       filtered = breedsToFilter.filter((breed) => breed.is_local);
@@ -107,7 +107,6 @@ export const applyFilters = (breedsToFilter, userFilters) => {
       });
       break;
     case WEIGHT_DESCENDING:
-      console.log("sorting by weight desc...");
       filtered = filtered.sort((a, b) => {
         if (
           (a.min_weight + a.max_weight) / 2 >
@@ -193,5 +192,6 @@ export const applyFilters = (breedsToFilter, userFilters) => {
       break;
   }
 
-  return filtered.map((e) => e);
+  // return filtered.map((e) => e);
+  return filtered;
 };
