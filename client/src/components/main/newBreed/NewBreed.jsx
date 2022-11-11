@@ -14,7 +14,7 @@ import { validateAll } from "./formValidators";
 import TempCard from "./TempCard";
 import FabAddTemp from "./FabAddTemp";
 import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
-import { SET_OPENED_DETAIL_FALSE } from "../../../redux/types";
+import { SET_OPENED_DETAIL_FALSE } from "../../../redux/constants";
 
 const NewBreed = ({ history }) => {
   //Redux state

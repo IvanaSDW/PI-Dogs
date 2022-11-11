@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBreedsByNameAction } from "../../../redux/actions/breedActions";
-import { RESET_BREEDS_DB_ERROR } from "../../../redux/types";
+import { RESET_BREEDS_DB_ERROR } from "../../../redux/constants";
 import "./searchBar.css";
 
 const SearchBar = () => {

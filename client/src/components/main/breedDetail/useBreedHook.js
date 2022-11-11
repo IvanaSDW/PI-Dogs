@@ -5,7 +5,7 @@ import {
   GET_BREED_BY_ID_ERROR,
   GET_BREED_BY_ID_SUCCESS,
   LOADING_DB_BREEDS,
-} from "../../../redux/types";
+} from "../../../redux/constants";
 
 export const useBreed = (breedId) => {
   const [breedData, setBreedData] = useState();

@@ -2,7 +2,7 @@ import "./dogCard.css";
 import rightArrow from "../../../assets/right-arrow.png";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { SET_OPENED_DETAIL_TRUE } from "../../../redux/types";
+import { SET_OPENED_DETAIL_TRUE } from "../../../redux/constants";
 
 const DogCard = (props) => {
   const { breed } = props;

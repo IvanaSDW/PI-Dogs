@@ -6,25 +6,51 @@ import fav_off from "../../../assets/favorite_off.png";
 import NavBar from "../../header/NavBar.jsx";
 import Footer from "../../footer/Footer";
 import { useBreed } from "./useBreedHook";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBreedByIdAction } from "../../../redux/actions/breedActions";
+import { useEffect, useState } from "react";
 
 const BreedDetail = (props) => {
   //Received by props
   const { breedId } = props.match.params;
 
   //Global state
-  const { breedDbloading, breedDbError } = useSelector((state) => state.breeds);
+  const { breedDbloading, breedDbError, workingOnDelete, deleteBreedError } =
+    useSelector((state) => state.breeds);
 
   const currentBreed = useBreed(breedId);
 
   const navigate = useHistory();
+
+  const dispatch = useDispatch();
+
+  const onDeleteBreed = (breedId) => {
+    dispatch(deleteBreedByIdAction(breedId));
+  };
+
+  const [isFirstRender, setFirstRender] = useState(true);
+  const [isBreedDeleted, setBreedDeleted] = useState(false);
+
+  useEffect(() => {
+    if (workingOnDelete) {
+      setFirstRender(false);
+    } else {
+      if (!isFirstRender) {
+        if (deleteBreedError) {
+          console.log('error deleting breed')
+        } else {
+          setBreedDeleted(true);
+        }
+      }
+    }
+  }, [workingOnDelete, deleteBreedError]);
 
   return (
     <>
       <NavBar />
       <div className="breed-detail-container">
         <div className="card-wrapper">
-          {!breedDbError && !breedDbloading ? (
+          {!breedDbError && !breedDbloading && !isBreedDeleted ? (
             <div className="detail-card">
               <img
                 className="breed-image"
@@ -70,23 +96,43 @@ const BreedDetail = (props) => {
                     <p>{currentBreed?.temperament}</p>
                   </div>
                 </div>
-                <div className="detail-footer"></div>
+                <div className="detail-footer">
+                  {breedId.slice(0, 3) === "api" ? null : (
+                    <button
+                      className="delete-button"
+                      onClick={() => onDeleteBreed(breedId)}
+                    >
+                      {workingOnDelete ? (
+                        <p>w o r k i n g ...</p>
+                      ) : deleteBreedError ? (
+                        <p>{"Could not delete breed."}</p>
+                      ) : (
+                        <p>
+                          Delete this breed{" "}
+                          <span className="trash-can">{"\u{1F5D1}"}</span>
+                        </p>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ) : (
             <div className="error-card">
-              {breedDbloading ? <p>L O A D I N G . . . </p>
-               :
-               <div>
-                <button
-                  className="back-button"
-                  onClick={() => navigate.goBack()}
-                >
-                  <img className="arrow" src={leftArrow} alt="arrow" />
-                  {"Back"}
-                </button>
-                <p>No further details found for this breed</p>
-               </div> }
+              {breedDbloading ? (
+                <p>L O A D I N G . . . </p>
+              ) : (
+                <div>
+                  <button
+                    className="back-button"
+                    onClick={() => navigate.goBack()}
+                  >
+                    <img className="arrow" src={leftArrow} alt="arrow" />
+                    {"Back"}
+                  </button>
+                  <p>There is no information about this breed or could have been deleted.</p>
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -39,7 +39,6 @@ const getAllTemperaments = async () => {
 };
 
 const createTemperament = async (temperament) => {
-  console.log("createTemperament called for: ", temperament);
   try {
     const [newTemp, created] = await Temperament.findOrCreate({
       where: {
@@ -54,7 +53,6 @@ const createTemperament = async (temperament) => {
     }
 
   } catch (error) {
-    console.log('error from createTemperament controller: ', error);
     return error;
   }
 };

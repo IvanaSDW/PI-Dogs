@@ -19,7 +19,7 @@ import {
   USER_CREATED,
   WEIGHT_ASCENDING,
   WEIGHT_DESCENDING,
-} from "../../../redux/types";
+} from "../../../redux/constants";
 
 const FilterForm = () => {
   const navigate = useHistory();

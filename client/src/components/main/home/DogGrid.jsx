@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { UPDATE_CURRENT_PAGE } from "../../../redux/types/index.js";
+import { UPDATE_CURRENT_PAGE } from "../../../redux/constants/index.js";
 import { calcBreedsToShowRange, calcPageRange } from "../../../utils/logic.js";
 import DogCard from "../home/DogCard.jsx";
 import "./dogGrid.css";

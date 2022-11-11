@@ -174,7 +174,6 @@ const getBreedDetails = async (breedId) => {
     id = breedId.slice(3);
     const breedObj = await getBreedFromApi(id);
     if (!breedObj) {
-      console.log("not breed object found");
       throw new Error(`No breed found with id = ${breedId}`);
     } else return breedObj;
   } else {
@@ -314,7 +313,6 @@ const createDog = async (reqBody) => {
 };
 
 const deleteBreedFromLocal = async (breedId) => {
-  console.log('called for delete')
   return await Dog.destroy({
     where: {
       id: breedId,

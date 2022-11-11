@@ -47,6 +47,7 @@
 
 .detail-text {
   padding: 24px;
+  position: relative;
 }
 
 .back-button {
@@ -62,6 +63,7 @@
   font-size: 12px;
   color: #8c30f5;
   margin-bottom: 12px;
+  cursor: pointer;
 }
 
 .arrow {
@@ -194,7 +196,34 @@
 }
 
 .detail-footer {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
   padding: 10px;
+}
+
+.delete-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: red;
+  cursor: pointer;
+}
+
+.trash-can {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.delete-button:hover .trash-can{
+  font-size: 24px;
 }
 
 .footer {

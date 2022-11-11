@@ -18,15 +18,20 @@ import {
   ALL_SOURCES,
   TEMPERAMENT_UNSELECTED,
   SET_OPENED_DETAIL_FALSE,
-} from "../types";
+  WORKING_ON_DELETE,
+  DELETE_BREED_BY_ID_SUCCESS,
+  DELETE_BREED_BY_ID_ERROR,
+} from "../constants";
 
 const initialState = {
+  breedDbError: null,
+  breedDbloading: false,
+  workingOnDelete: false,
+  deleteBreedError: false,
+  shallResetSearch: false,
   breeds: [],
   breedsSearched: [],
   breedsToRender: [],
-  breedDbError: null,
-  breedDbloading: false,
-  shallResetSearch: false,
   userSearchKey: false,
   userFilters: {
     source: ALL_SOURCES,
@@ -62,7 +67,7 @@ const breedsReducer = (state = initialState, action) => {
         breedDbloading: true,
       };
 
-      case GET_BREED_BY_ID_SUCCESS:
+    case GET_BREED_BY_ID_SUCCESS:
     case CREATE_BREED_DB_SUCCESS:
       return {
         ...state,
@@ -95,12 +100,24 @@ const breedsReducer = (state = initialState, action) => {
         currentPage: 1,
       };
 
-    // case GET_BREED_BY_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     breedDbloading: false,
-    //     breedDbError: false,
-    //   };
+      case WORKING_ON_DELETE:
+        return {
+          ...state,
+          workingOnDelete: true,
+        };
+
+      case DELETE_BREED_BY_ID_SUCCESS:
+        return {
+          ...state,
+          workingOnDelete: false,
+        }
+
+        case DELETE_BREED_BY_ID_ERROR:
+          return {
+            ...state,
+            workingOnDelete: false,
+            deleteBreedError: action.payload,
+          }
 
     case APPLY_USER_FILTERS: {
       const newCurrentPage = state.openedDetail ? state.currentPage : 1;

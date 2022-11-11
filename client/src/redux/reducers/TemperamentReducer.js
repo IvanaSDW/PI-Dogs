@@ -4,7 +4,7 @@ import {
   GET_ALL_TEMPS_ERROR,
   GET_ALL_TEMPS_SUCESS,
   LOADING_DB_TEMPS,
-} from "../types";
+} from "../constants";
 
 const initialState = {
   temperaments: [],
@@ -21,7 +21,6 @@ const tempsReducer = (state = initialState, action) => {
       };
 
     case CREATE_TEMP_DB_SUCCESS:
-      console.log("New temp added: ", action.payload);
       return {
         ...state,
         tempsDbloading: false,

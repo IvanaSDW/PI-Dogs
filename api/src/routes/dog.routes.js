@@ -47,7 +47,6 @@ const postDogRoute = (router) => {
 const deleteDogRoute = (router) => {
   router.delete('/dogs/:idBreed', async (req, res) => {
     const { idBreed } = req.params;
-    console.log('id received: ', idBreed)
     try {
       await deleteBreedFromLocal(idBreed)
       return res.status(200).send('Breed succesfully deleted!')

@@ -11,11 +11,13 @@ import {
   FILTER_BY_SOURCE,
   FILTER_BY_TEMP,
   APPLY_USER_FILTERS,
-} from "../types";
+  DELETE_BREED_BY_ID_SUCCESS,
+  WORKING_ON_DELETE,
+  DELETE_BREED_BY_ID_ERROR,
+} from "../constants";
 import axiosClient from "../../utils/axios.js";
 
 export const createBreedAction = (newBreedObj) => {
-  console.log('cerating new breed out of this data: ', newBreedObj)
   return async (dispatch) => {
     dispatch({
       type: LOADING_DB_BREEDS,
@@ -86,7 +88,7 @@ export const getBreedsByNameAction = (name) => {
       });
       dispatch({
         type: GET_BREEDS_BY_NAME_SUCCESS,
-        payload: { data: response.data, keyWord: name }
+        payload: { data: response.data, keyWord: name },
       });
     } catch (error) {
       dispatch({
@@ -108,14 +110,35 @@ export const filterByTemperamentAction = (temperament) => {
     dispatch({
       type: FILTER_BY_TEMP,
       payload: temperament,
-    })
-  } 
-}
+    });
+  };
+};
 
 export const applyUserFiltersAction = () => {
   return (dispatch) => {
     dispatch({
       type: APPLY_USER_FILTERS,
-    })
-  }
-}
+    });
+  };
+};
+
+export const deleteBreedByIdAction = (breedId) => {
+  return async (dispatch) => {
+    dispatch({
+      type: WORKING_ON_DELETE,
+    });
+
+    try {
+      await axiosClient.delete(`/dogs/${breedId}`);
+      dispatch({
+        type: DELETE_BREED_BY_ID_SUCCESS,
+      });
+      dispatch(getAllBreedsAction())
+    } catch (error) {
+      dispatch({
+        type: DELETE_BREED_BY_ID_ERROR,
+        payload: { message: error.message, name: error.name, code: error.code },
+      });
+    }
+  };
+};

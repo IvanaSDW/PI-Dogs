@@ -15,7 +15,7 @@ import {
   WEIGHT_DESCENDING,
   WEIGHT_DESC_NAME_ASC,
   WEIGHT_DESC_NAME_DESC,
-} from "../redux/types";
+} from "../redux/constants";
 
 export const calcPageRange = (currentPage, pageQty) => {
   let pageRange = [];

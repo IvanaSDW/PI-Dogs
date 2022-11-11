@@ -17,7 +17,6 @@ const Home = () => {
   
   useEffect(() => {
     if (shallResetSearch) {
-      console.log('refreshing breeds from db .....')
       dispatch(getAllBreedsAction());
     }
   }, [shallResetSearch, dispatch])

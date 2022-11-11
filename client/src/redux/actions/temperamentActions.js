@@ -5,7 +5,7 @@ import {
   GET_ALL_TEMPS_ERROR,
   GET_ALL_TEMPS_SUCESS,
   LOADING_DB_TEMPS,
-} from "../types";
+} from "../constants";
 
 export const getAllTemperamentsAction = () => {
   return async (dispatch) => {
