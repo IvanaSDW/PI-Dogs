@@ -43,6 +43,7 @@ const DogGrid = () => {
 
   return (
     <>
+    {/* Gallery container */}
       <div className="gridContainer">
         {breedsToRender.length > 0 ? (
           breedsToRender
@@ -56,11 +57,13 @@ const DogGrid = () => {
           </div>
         )}
       </div>
+
+      {/* Paginator  */}
       <div className={`paginator-container ${pageQty < 2 ? "hidden" : ""}`}>
         <div className="pagination-divider"></div>
         <div className="pagination">
           <p className="first-last-button" onClick={() => onPageChange(1)}>
-            {"<<"}
+            {"\u2770\u2770\u2770"}
           </p>
           <p
             className="prev-next-button"
@@ -91,7 +94,7 @@ const DogGrid = () => {
             className="first-last-button"
             onClick={() => onPageChange(pageQty)}
           >
-            {">>"}
+            {"\u2771\u2771\u2771"}
           </p>
         </div>
       </div>

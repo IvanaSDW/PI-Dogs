@@ -26,7 +26,7 @@ const fetchApiTemperaments = async () => {
 };
 
 const getAllTemperaments = async () => {
-  // await fetchApiTemperaments();
+  await fetchApiTemperaments();
   try {
     return await Temperament.findAll({
       order: [

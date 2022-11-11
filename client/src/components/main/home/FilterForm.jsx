@@ -13,6 +13,7 @@ import {
   NAME_ASCENDING,
   NAME_DESCENDING,
   RESET_USER_FILTERS,
+  SET_OPENED_DETAIL_TRUE,
   TEMPERAMENT_UNSELECTED,
   UPDATE_USER_FILTERS,
   USER_CREATED,
@@ -60,6 +61,9 @@ const FilterForm = () => {
   }, [filterControls, dispatch]);
 
   const onCreateBreedClicked = () => {
+    dispatch({
+      type: SET_OPENED_DETAIL_TRUE,
+    })
     navigate.push("/home/newBreed");
   };
 
@@ -275,7 +279,7 @@ const FilterForm = () => {
             name="sortByName"
             // onChange={(e) => onSortByName(e, NAME_ASCENDING)}
             onChange={(e) => onSortChanged(e, NAME_ASCENDING)}
-            checked={filterControls.sortByName === NAME_ASCENDING}
+            checked={userFilters.sorting === NAME_ASCENDING}
           />
           <span className="checkmark"></span>
         </label>
@@ -287,7 +291,7 @@ const FilterForm = () => {
             name="sortByName"
             // onChange={(e) => onSortByName(e, NAME_DESCENDING)}
             onChange={(e) => onSortChanged(e, NAME_DESCENDING)}
-            checked={filterControls.sortByName === NAME_DESCENDING}
+            checked={userFilters.sorting === NAME_DESCENDING}
           />
           <span className="checkmark"></span>
         </label>
@@ -299,7 +303,7 @@ const FilterForm = () => {
             name="sortByWeight"
             // onChange={(e) => onSortByWeight(e, WEIGHT_ASCENDING)}
             onChange={(e) => onSortChanged(e, WEIGHT_ASCENDING)}
-            checked={filterControls.sortByWeight === WEIGHT_ASCENDING}
+            checked={userFilters.sorting === WEIGHT_ASCENDING}
           />
           <span className="checkmark"></span>
         </label>
@@ -311,7 +315,7 @@ const FilterForm = () => {
             name="sortByWeight"
             // onChange={(e) => onSortByWeight(e, WEIGHT_DESCENDING)}
             onChange={(e) => onSortChanged(e, WEIGHT_DESCENDING)}
-            checked={filterControls.sortByWeight === WEIGHT_DESCENDING}
+            checked={userFilters.sorting === WEIGHT_DESCENDING}
           />
           <span className="checkmark"></span>
         </label>

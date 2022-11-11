@@ -13,6 +13,7 @@ import { validateAll } from "./formValidators";
 import TempCard from "./TempCard";
 import FabAddTemp from "./FabAddTemp";
 import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
+import { SET_OPENED_DETAIL_FALSE, SET_OPENED_DETAIL_TRUE } from "../../../redux/types";
 
 
 const NewBreed = ({ history }) => {
@@ -44,6 +45,9 @@ const NewBreed = ({ history }) => {
     } else {
       if (cycleState === Cycle.LOADING) {
         setCycleState(Cycle.SUCCESS);
+        dispatch({
+          type: SET_OPENED_DETAIL_FALSE,
+        })
       }
     }
     if (breedDbloading) {

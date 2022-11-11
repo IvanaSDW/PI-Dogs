@@ -17,6 +17,7 @@ import {
   SET_OPENED_DETAIL_TRUE,
   ALL_SOURCES,
   TEMPERAMENT_UNSELECTED,
+  SET_OPENED_DETAIL_FALSE,
 } from "../types";
 
 const initialState = {
@@ -140,6 +141,12 @@ const breedsReducer = (state = initialState, action) => {
       return {
         ...state,
         openedDetail: true,
+      };
+
+    case SET_OPENED_DETAIL_FALSE:
+      return {
+        ...state,
+        openedDetail: false,
       };
 
     default:
