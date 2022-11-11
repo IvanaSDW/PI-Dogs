@@ -5,6 +5,7 @@ const {
   getDogsRoute,
   getBreedRoute,
   postDogRoute,
+  deleteDogRoute,
 } = require("./dog.routes.js");
 
 // const postDog = require("./postDog.js");
@@ -17,6 +18,7 @@ getBreedRoute(router);
 postDogRoute(router);
 getTemperamentsRoute(router);
 createTemperamentRoute(router);
+deleteDogRoute(router);
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);

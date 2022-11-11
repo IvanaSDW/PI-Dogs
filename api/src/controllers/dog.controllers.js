@@ -3,20 +3,18 @@ const { Op } = require("sequelize");
 const { Dog, Temperament } = require("../db.js");
 
 const getAllLocalDogs = async () => {
-  
-    const breedList = await Dog.findAll({
-      include: Temperament,
-      attributes: [
-        "id",
-        "image_url",
-        "name",
-        "min_weight",
-        "max_weight",
-        "is_local",
-      ],
-      order: [["name", "ASC"]],
-    });
-  
+  const breedList = await Dog.findAll({
+    include: Temperament,
+    attributes: [
+      "id",
+      "image_url",
+      "name",
+      "min_weight",
+      "max_weight",
+      "is_local",
+    ],
+    order: [["name", "ASC"]],
+  });
 
   const mappedDogs = breedList.map((breed) => {
     const thisTemps = breed.temperaments.map((temp) => {
@@ -73,7 +71,7 @@ const getAllDogs = async () => {
 };
 
 const getLocalDogsByBreed = async (breed) => {
-  const breedsByName =  await Dog.findAll({
+  const breedsByName = await Dog.findAll({
     include: Temperament,
     attributes: [
       "id",
@@ -315,10 +313,20 @@ const createDog = async (reqBody) => {
   }
 };
 
+const deleteBreedFromLocal = async (breedId) => {
+  console.log('called for delete')
+  return await Dog.destroy({
+    where: {
+      id: breedId,
+    },
+  });
+};
+
 module.exports = {
   // getDogs,
   getAllDogs,
   getDogsByBreed,
   getBreedDetails,
   createDog,
+  deleteBreedFromLocal,
 };

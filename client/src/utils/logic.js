@@ -123,7 +123,7 @@ export const applyFilters = (breedsToFilter, userFilters) => {
       break;
     case NAME_ASC_WEIGHT_ASC:
       filtered = filtered.sort(
-        (a, b) => a.name.localeCompare(b.name.toUpperCase())
+        (a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase())
         //  || (a.min_weight + a.max_weight) / 2 - (b.min_weight + b.max_weight) / 2
       );
       break;
@@ -146,7 +146,6 @@ export const applyFilters = (breedsToFilter, userFilters) => {
       );
       break;
     case WEIGHT_ASC_NAME_ASC:
-      console.log('Sortin weight desc - name asc');
       filtered = filtered.sort((a, b) => {
         if (
           (a.min_weight + a.max_weight) / 2 ===

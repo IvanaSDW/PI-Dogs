@@ -46,6 +46,7 @@
   background-color: transparent;
   border: none;
   padding-left: 12px;
+  cursor: pointer;
 }
 
 .card-body {
@@ -54,10 +55,14 @@
   margin: 0;
 }
 
-.new-breed-image {
-  object-fit: scale-down;
+.breed-image {
+  object-fit: cover;
   width: 50%;
   border-radius: 0 0 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .breed-form {

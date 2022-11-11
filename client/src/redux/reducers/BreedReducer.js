@@ -62,12 +62,13 @@ const breedsReducer = (state = initialState, action) => {
         breedDbloading: true,
       };
 
+      case GET_BREED_BY_ID_SUCCESS:
     case CREATE_BREED_DB_SUCCESS:
       return {
         ...state,
         breedDbloading: false,
         breedDbError: false,
-        shallResetSearch: true,
+        // shallResetSearch: true,
       };
 
     case GET_ALL_BREEDS_SUCCESS:
@@ -79,7 +80,7 @@ const breedsReducer = (state = initialState, action) => {
         userSearchKey: false,
         breedsSearched: action.payload,
         breedsToRender: action.payload,
-        shallResetSearch: false,
+        // shallResetSearch: false,
         currentPage: 1,
       };
     case GET_BREEDS_BY_NAME_SUCCESS:
@@ -90,16 +91,16 @@ const breedsReducer = (state = initialState, action) => {
         userSearchKey: action.payload.keyWord,
         breedsSearched: action.payload.data,
         breedsToRender: applyFilters(action.payload.data, state.userFilters),
-        shallResetSearch: false,
+        // shallResetSearch: false,
         currentPage: 1,
       };
 
-    case GET_BREED_BY_ID_SUCCESS:
-      return {
-        ...state,
-        breedDbloading: false,
-        breedDbError: false,
-      };
+    // case GET_BREED_BY_ID_SUCCESS:
+    //   return {
+    //     ...state,
+    //     breedDbloading: false,
+    //     breedDbError: false,
+    //   };
 
     case APPLY_USER_FILTERS: {
       const newCurrentPage = state.openedDetail ? state.currentPage : 1;

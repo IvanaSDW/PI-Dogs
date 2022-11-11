@@ -15,6 +15,7 @@ import {
 import axiosClient from "../../utils/axios.js";
 
 export const createBreedAction = (newBreedObj) => {
+  console.log('cerating new breed out of this data: ', newBreedObj)
   return async (dispatch) => {
     dispatch({
       type: LOADING_DB_BREEDS,

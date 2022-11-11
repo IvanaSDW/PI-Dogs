@@ -17,6 +17,7 @@ const DogCard = (props) => {
     navigate.push(`/home/breeds/${breed.id}`);
   };
 
+
   return (
     <div className="dog-card">
       {breed.image_url.includes("undefined") ? (

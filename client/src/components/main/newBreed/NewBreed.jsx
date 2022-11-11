@@ -1,5 +1,6 @@
 import "./newBreed.css";
-// import dogPlaceHolder from '../../../assets/logo.png';
+import axios from "axios";
+import dogPlaceHolder from '../../../assets/image_place_holder.png'
 import leftArrow from "../../../assets/left-arrow.png";
 import Footer from "../../footer/Footer";
 import NavBar from "../../header/NavBar";
@@ -13,11 +14,9 @@ import { validateAll } from "./formValidators";
 import TempCard from "./TempCard";
 import FabAddTemp from "./FabAddTemp";
 import { createTemperamentAction } from "../../../redux/actions/temperamentActions";
-import { SET_OPENED_DETAIL_FALSE, SET_OPENED_DETAIL_TRUE } from "../../../redux/types";
-
+import { SET_OPENED_DETAIL_FALSE } from "../../../redux/types";
 
 const NewBreed = ({ history }) => {
-
   //Redux state
   const { breedDbloading, breedDbError: networkError } = useSelector(
     (state) => state.breeds
@@ -36,7 +35,8 @@ const NewBreed = ({ history }) => {
     UPDATING_BREEDS: "UPDATING_BREEDS",
   };
 
-  const [cycleState, setCycleState] = useState(Cycle.SET);
+  const [cycleState, setCycleState] = useState(Cycle.SET); //For database access state
+
 
   useEffect(() => {
     if (cycleState === Cycle.UPDATING_BREEDS) return;
@@ -47,7 +47,7 @@ const NewBreed = ({ history }) => {
         setCycleState(Cycle.SUCCESS);
         dispatch({
           type: SET_OPENED_DETAIL_FALSE,
-        })
+        });
       }
     }
     if (breedDbloading) {
@@ -85,6 +85,7 @@ const NewBreed = ({ history }) => {
     min_years: "",
     max_years: "",
     temperaments: [],
+    image_url: false,
   });
 
   const [fieldErrors, setFieldErrors] = useState({
@@ -138,6 +139,7 @@ const NewBreed = ({ history }) => {
           min_years: "",
           max_years: "",
           temperaments: [],
+          image_url: false,
         };
       });
       setFieldErrors((prevErr) => {
@@ -155,6 +157,18 @@ const NewBreed = ({ history }) => {
       });
     }
   }, [cycleState]);
+
+  const addRandomImage = async () => {
+    let randomUrl = 'https://source.unsplash.com/random/600x600/?Dog'
+    axios.get(randomUrl).then( data => {
+      setNewBreedObj(prevObj => {
+        return {
+          ...prevObj,
+          image_url: data.request.responseURL,
+        }
+      });
+    });
+  }
 
   const dispatch = useDispatch();
   const createBreed = () => dispatch(createBreedAction(newBreedObj));
@@ -198,11 +212,11 @@ const NewBreed = ({ history }) => {
       inputValue = Number(e.target.value);
     else inputValue = e.target.value.trimStart();
 
-    if (inputField === 'name' && inputValue.length > 2) {
+    if (inputField === "name" && inputValue.length > 2) {
       setFieldErrors({
         ...fieldErrors,
-        name: {...fieldErrors.name, touched: true}
-      })
+        name: { ...fieldErrors.name, touched: true },
+      });
     }
 
     setNewBreedObj((prevObj) => {
@@ -229,14 +243,19 @@ const NewBreed = ({ history }) => {
             <h2 className="card-title">Create new breed</h2>
           </div>
 
-          <div className="card-body">
-            <img
-              src="https://placedog.net/600/600?r"
-              // src={dogPlaceHolder}
+          <div className="card-body" >
+            {/* <div className="new-breed-image"> */}
+              {/* <DragAndDrop /> */}
+              <img
+              // src="https://placedog.net/600/600?r"
+              src={!newBreedObj.image_url? dogPlaceHolder : newBreedObj.image_url}
               // src="https://source.unsplash.com/random/?Dog&1"
               alt="new breed"
-              className="new-breed-image"
+              className="breed-image"
+              onClick={() => addRandomImage()}
             />
+            {/* </div> */}
+
             <form onSubmit={handleSubmit} className="breed-form">
               <div className="form-group">
                 <label htmlFor="inputName" className="name-group">
@@ -285,7 +304,8 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) &&
+                            e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_height}
@@ -322,7 +342,8 @@ const NewBreed = ({ history }) => {
                           }}
                           value={newBreedObj.max_height}
                           onKeyDown={(e) =>
-                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) &&
+                            e.preventDefault()
                           }
                           onChange={handleInput}
                           onBlur={(e) =>
@@ -362,7 +383,8 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) &&
+                            e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_weight}
@@ -398,7 +420,8 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) &&
+                            e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_weight}
@@ -439,7 +462,8 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) &&
+                            e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.min_years}
@@ -475,7 +499,8 @@ const NewBreed = ({ history }) => {
                             return false;
                           }}
                           onKeyDown={(e) =>
-                            forbiddenInNumericFields.includes(e.key) && e.preventDefault()
+                            forbiddenInNumericFields.includes(e.key) &&
+                            e.preventDefault()
                           }
                           onChange={handleInput}
                           value={newBreedObj.max_years}
@@ -578,6 +603,5 @@ const NewBreed = ({ history }) => {
     </div>
   );
 };
-
 
 export default NewBreed;

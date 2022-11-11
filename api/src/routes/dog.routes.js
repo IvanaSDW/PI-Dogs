@@ -3,6 +3,7 @@ const {
   getAllDogs,
   getDogsByBreed,
   getBreedDetails,
+  deleteBreedFromLocal,
 } = require("../controllers/dog.controllers.js");
 // const router = require("./index.js");
 
@@ -25,7 +26,6 @@ const getBreedRoute = (router) => {
       const breedDetails = await getBreedDetails(idBreed);
       res.status(200).json(breedDetails);
     } catch (error) {
-      console.log("error: ", error);
       return res.status(404).send(error.message);
     }
   });
@@ -42,8 +42,26 @@ const postDogRoute = (router) => {
     }
   });
 };
+
+
+const deleteDogRoute = (router) => {
+  router.delete('/dogs/:idBreed', async (req, res) => {
+    const { idBreed } = req.params;
+    console.log('id received: ', idBreed)
+    try {
+      await deleteBreedFromLocal(idBreed)
+      return res.status(200).send('Breed succesfully deleted!')
+    } catch (error) {
+      return res.status(404).send(error.message);
+    }
+  });
+}
+
+
+
 module.exports = {
   getDogsRoute,
   getBreedRoute,
   postDogRoute,
+  deleteDogRoute,
 };

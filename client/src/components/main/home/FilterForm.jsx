@@ -41,19 +41,12 @@ const FilterForm = () => {
 
   let temperamentsOnRenderedBreeds = new Set();
 
-  console.log("breeds render: ", breedsToRender);
-
   breedsToRender.map(
     (breed) =>
       (temperamentsOnRenderedBreeds = new Set([
         ...temperamentsOnRenderedBreeds,
         ...breed.temperaments,
       ]))
-  );
-
-  console.log(
-    "temperaments on breeds to render: ",
-    temperamentsOnRenderedBreeds
   );
 
   useEffect(() => {
@@ -265,8 +258,8 @@ const FilterForm = () => {
           {`${
             userFilters.sorting
               ? userFilters.sorting
-                  .replace("\u2191", "\u2191 - ")
-                  .replace("\u2193", "\u2193 - ")
+                  .replace("\u2191", "\u2191 \u203A ")
+                  .replace("\u2193", "\u2193 \u203A ")
               : "unordered"
           } `}
         </div>
@@ -279,7 +272,7 @@ const FilterForm = () => {
             name="sortByName"
             // onChange={(e) => onSortByName(e, NAME_ASCENDING)}
             onChange={(e) => onSortChanged(e, NAME_ASCENDING)}
-            checked={userFilters.sorting === NAME_ASCENDING}
+            checked={userFilters.sorting && userFilters.sorting.includes(NAME_ASCENDING)}
           />
           <span className="checkmark"></span>
         </label>
@@ -291,7 +284,7 @@ const FilterForm = () => {
             name="sortByName"
             // onChange={(e) => onSortByName(e, NAME_DESCENDING)}
             onChange={(e) => onSortChanged(e, NAME_DESCENDING)}
-            checked={userFilters.sorting === NAME_DESCENDING}
+            checked={userFilters.sorting && userFilters.sorting.includes(NAME_DESCENDING)}
           />
           <span className="checkmark"></span>
         </label>
@@ -303,7 +296,7 @@ const FilterForm = () => {
             name="sortByWeight"
             // onChange={(e) => onSortByWeight(e, WEIGHT_ASCENDING)}
             onChange={(e) => onSortChanged(e, WEIGHT_ASCENDING)}
-            checked={userFilters.sorting === WEIGHT_ASCENDING}
+            checked={userFilters.sorting && userFilters.sorting.includes(WEIGHT_ASCENDING)}
           />
           <span className="checkmark"></span>
         </label>
@@ -315,7 +308,7 @@ const FilterForm = () => {
             name="sortByWeight"
             // onChange={(e) => onSortByWeight(e, WEIGHT_DESCENDING)}
             onChange={(e) => onSortChanged(e, WEIGHT_DESCENDING)}
-            checked={userFilters.sorting === WEIGHT_DESCENDING}
+            checked={userFilters.sorting && userFilters.sorting.includes(WEIGHT_DESCENDING)}
           />
           <span className="checkmark"></span>
         </label>

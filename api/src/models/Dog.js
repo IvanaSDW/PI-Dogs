@@ -39,10 +39,6 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-
-      // life_span: {
-      //   type: DataTypes.STRING,
-      // },
       
       is_local: {
         type: DataTypes.BOOLEAN,
@@ -50,7 +46,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       image_url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         defaultValue: 'https://placedog.net/950/640?r'
       },
     },
